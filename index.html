@@ -48,7 +48,6 @@
       width: 160px;
       height: 160px;
       border-radius: 50%;
-      background-color: #3b5998;
       color: white;
       display: flex;
       flex-direction: column;
@@ -63,6 +62,20 @@
       transform: scale(1.05);
       cursor: pointer;
     }
+    .circle:nth-child(1) { background-color: #f39c12; } /* orange */
+    .circle:nth-child(2) { background-color: #27ae60; } /* green */
+    .circle:nth-child(3) { background-color: #2980b9; } /* blue */
+    .description-box {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 1rem;
+      color: #3b5998;
+      padding: 1rem;
+      background-color: #e9ecef;
+      border-radius: 8px;
+      display: none;
+    }
+    
     .contact {
       background-color: #e9ecef;
       padding: 2rem;
@@ -100,32 +113,31 @@
     <p><strong>"Explore patterns, shapes, logic & more – through visuals, discovery and play!"</strong></p>
     <p><em>Because math is all about understanding – not memorization!</em></p>
   
-
-  
-    <h2 class="section-title">Age Groups</h2>
-    <ul>
-      <li><strong>Mini Explorers (Ages 3–5)</strong> – KinderTots: Discovery through play, colors, shapes, and number stories.</li>
-      <li><strong>Junior Thinkers (Ages 6–8)</strong> – 1st to 3rd Grade: Puzzles, logic games, hands-on math experiments.</li>
-      <li><strong>Senior Champs (Ages 9–12)</strong> – 4th to 5th Grade: Real-world math challenges, visual proofs, and fun competitions.</li>
-    </ul>
-
-
-  
     <h2 class="section-title">Our Age Groups</h2>
     <div class="circle-container">
-      <div class="circle">
+      <div class="circle" onclick="showDescription('explorers')">
         <strong>Mini Explorers</strong><br />Ages 3–5
       </div>
-      <div class="circle">
+      <div class="circle" onclick="showDescription('thinkers')">
         <strong>Junior Thinkers</strong><br />Ages 6–8
       </div>
-      <div class="circle">
+      <div class="circle" onclick="showDescription('champs')">
         <strong>Senior Champs</strong><br />Ages 9–12
       </div>
     </div>
-  
-  
- 
+    <div id="explorers" class="description-box">
+      <strong>Mini Explorers (Ages 3–5)</strong> – KinderTots: Discovery through play, colors, shapes, and number stories.
+    </div>
+    <div id="thinkers" class="description-box">
+      <strong>Junior Thinkers (Ages 6–8)</strong> – 1st to 3rd Grade: Puzzles, logic games, hands-on math experiments.
+    </div>
+    <div id="champs" class="description-box">
+      <strong>Senior Champs (Ages 9–12)</strong> – 4th to 5th Grade: Real-world math challenges, visual proofs, and fun competitions.
+    </div>
+
+  </section>
+
+  <section>
     <h2 class="section-title">Schedule</h2>
     <p>📅 <strong>6 Weeks</strong> | 🗓️ <strong>3 Days/Week</strong> | 🏫 <strong>In-person</strong></p>
     <p><strong>Book your spot today and get an early bird discount!</strong></p>
@@ -142,5 +154,12 @@
   <footer>
     &copy; 2025 Scholars Academy Prague, A Project by STEM Intelligence SMC Private Limited. All rights reserved.
   </footer>
+
+  <script>
+    function showDescription(id) {
+      document.querySelectorAll('.description-box').forEach(box => box.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+    }
+  </script>
 </body>
 </html>
