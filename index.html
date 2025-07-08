@@ -8,95 +8,148 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <link rel="icon" href="assets/favicon-32x32.png" type="image/x-icon" />
  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f8f9fa;
-      color: #333;
-    }
-    header {
-      background-color: #6415b7;
-      color: white;
-      padding: 2rem;
-      text-align: center;
-    }
+  body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    color: #333;
+  }
+
+  header {
+    background-color: #6415b7;
+    color: white;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+  }
+
+  header p {
+    margin-top: 0.5rem;
+    font-size: 1.2rem;
+  }
+
+  section {
+    max-width: 1000px;
+    width: 100%;
+    margin: auto;
+    padding: 2rem;
+    border-radius: 8px;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+    color: #6415b7;
+    text-align: center;
+  }
+
+  .circle-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .circle {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+    font-size: 1rem;
+  }
+
+  .circle:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+  }
+
+  .circle:nth-child(1) { background-color: #f39c12; }
+  .circle:nth-child(2) { background-color: #27ae60; }
+  .circle:nth-child(3) { background-color: #2980b9; }
+
+  .description-box {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 1rem;
+    color: #3b5998;
+    padding: 1rem;
+    background-color: #e9ecef;
+    border-radius: 8px;
+    display: none;
+  }
+
+  .contact {
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .btn {
+    background-color: #6415b7;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: 1rem;
+  }
+
+  footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: #6415b7;
+    color: white;
+  }
+
+  /* ✅ Mobile responsiveness */
+  @media (max-width: 768px) {
     header h1 {
-      margin: 0;
-      font-size: 2.5rem;
+      font-size: 2rem;
     }
+
     header p {
-      margin-top: 0.5rem;
-      font-size: 1.2rem;
-    }
-    section {
-      max-width: 1000px;
-      margin: auto;
-      border-radius: 8px;
-    }
-    .section-title {
-      font-size: 1.8rem;
-      color: #6415b7;
-    }
-    .circle-container {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-    .circle {
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 1rem;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      transition: transform 0.3s;
-    }
-    .circle:hover {
-      transform: scale(1.05);
-      cursor: pointer;
-    }
-    .circle:nth-child(1) { background-color: #f39c12; } /* orange */
-    .circle:nth-child(2) { background-color: #27ae60; } /* green */
-    .circle:nth-child(3) { background-color: #2980b9; } /* blue */
-    .description-box {
-      margin-top: 1rem;
-      text-align: center;
       font-size: 1rem;
-      color: #3b5998;
-      padding: 1rem;
-      background-color: #e9ecef;
-      border-radius: 8px;
-      display: none;
     }
-    
-    .contact {
-   
-      padding: 1rem;
-      border-radius: 8px;
+
+    .circle-container {
+      flex-direction: column;
+      gap: 1.5rem;
+      align-items: center;
     }
-    footer {
-      text-align: center;
-      padding: 1rem;
-      background-color: #6415b7;
-      color: white;
+
+    .circle {
+      width: 140px;
+      height: 140px;
+      font-size: 0.9rem;
     }
+
+    .section-title {
+      font-size: 1.5rem;
+    }
+
+    section {
+      padding: 1.5rem 1rem;
+    }
+
     .btn {
-      background-color: #6415b7;
-      color: white;
-      padding: 0.75rem 1.5rem;
-      text-decoration: none;
-      border-radius: 4px;
-      display: inline-block;
-      margin-top: 1rem;
+      width: 100%;
+      font-size: 1rem;
     }
-  </style>
+  }
+</style>
 </head>
 <body>
   <header>
