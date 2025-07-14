@@ -4,252 +4,615 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Scholars Academy | Visual Math Summer Camp</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="icon" href="assets/favicon-32x32.png" type="image/x-icon" />
- <style>
-  body {
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f8f9fa;
-    color: #333;
-  }
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  header {
-    background-color: #6415b7;
-    color: white;
-    padding: 2rem;
-    text-align: center;
-  }
+    body {
+      font-family: 'Poppins', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
 
-  header h1 {
-    margin: 0;
-    font-size: 2.5rem;
-  }
+    /* Enhanced Header */
+    header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 3rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
 
-  header p {
-    margin-top: 0.5rem;
-    font-size: 1.2rem;
-  }
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: float 3s ease-in-out infinite;
+    }
 
-  section {
-    max-width: 1000px;
-    width: 100%;
-    margin: auto;
-    padding: 2rem;
-    border-radius: 8px;
-  }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
 
-  .section-title {
-    font-size: 1.8rem;
-    color: #6415b7;
-    text-align: center;
-  }
-
-  .circle-container {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin-top: 2rem;
-    flex-wrap: wrap;
-  }
-
-  .circle {
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 1rem;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    transition: transform 0.3s;
-    font-size: 1rem;
-  }
-
-  .circle:hover {
-    transform: scale(1.05);
-    cursor: pointer;
-  }
-
-  .circle:nth-child(1) { background-color: #f39c12; }
-  .circle:nth-child(2) { background-color: #27ae60; }
-  .circle:nth-child(3) { background-color: #2980b9; }
-
-  .description-box {
-    margin-top: 1rem;
-    text-align: center;
-    font-size: 1rem;
-    color: #3b5998;
-    padding: 1rem;
-    background-color: #e9ecef;
-    border-radius: 8px;
-    display: none;
-  }
-
-  .contact {
-    padding: 1rem;
-    border-radius: 8px;
-    text-align: center;
-  }
-
-  .btn {
-    background-color: #6415b7;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    text-decoration: none;
-    border-radius: 4px;
-    display: inline-block;
-    margin-top: 1rem;
-  }
-
-  footer {
-    text-align: center;
-    padding: 1rem;
-    background-color: #6415b7;
-    color: white;
-  }
-
-  /* ✅ Mobile responsiveness */
-  @media (max-width: 768px) {
     header h1 {
-      font-size: 2rem;
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
     }
 
-    header p {
-      font-size: 1rem;
+    header .subtitle {
+      font-size: 1.4rem;
+      font-weight: 300;
+      margin-bottom: 2rem;
+      position: relative;
+      z-index: 1;
     }
 
-    .circle-container {
-      flex-direction: column;
-      gap: 1.5rem;
+    .header-info {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .info-item {
+      display: flex;
       align-items: center;
+      gap: 0.5rem;
+      background: rgba(255,255,255,0.1);
+      padding: 0.75rem 1.5rem;
+      border-radius: 25px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: all 0.3s ease;
     }
 
-    .circle {
-      width: 140px;
-      height: 140px;
-      font-size: 0.9rem;
+    .info-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    /* Main Content Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* Enhanced Section Styling */
+    .section {
+      background: white;
+      border-radius: 20px;
+      padding: 3rem;
+      margin-bottom: 3rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
     }
 
     .section-title {
-      font-size: 1.5rem;
+      font-size: 2.5rem;
+      color: #6415b7;
+      text-align: center;
+      margin-bottom: 2rem;
+      font-weight: 600;
+      position: relative;
     }
 
-    section {
-      padding: 1.5rem 1rem;
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(to right, #6415b7, #8e44ad);
+      border-radius: 2px;
     }
 
-    .btn {
+    /* Enhanced Feature List */
+    .feature-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .feature-item {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      padding: 2rem;
+      border-radius: 15px;
+      border-left: 5px solid #6415b7;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      font-size: 1rem;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(100,21,183,0.05) 0%, transparent 50%);
+      transition: opacity 0.3s ease;
+      opacity: 0;
     }
-  }
-</style>
+
+    .feature-item:hover::before {
+      opacity: 1;
+    }
+
+    .feature-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #6415b7;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Enhanced Age Groups */
+    .age-groups {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .age-group {
+      color: white;
+      padding: 2.5rem;
+      border-radius: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .age-group::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      transition: transform 0.3s ease;
+      transform: scale(0);
+    }
+
+    .age-group:hover::before {
+      transform: scale(1);
+    }
+
+    .age-group:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+
+    .age-group h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .age-range {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .age-description {
+      font-size: 0.95rem;
+      opacity: 0.8;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Enhanced Schedule Section */
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .schedule-item {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      padding: 2rem;
+      border-radius: 15px;
+      text-align: center;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .schedule-item:hover {
+      border-color: #6415b7;
+      transform: translateY(-5px);
+    }
+
+    .schedule-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .schedule-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #6415b7;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Enhanced Contact Section */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .contact-item {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      border-radius: 15px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .contact-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+
+    .contact-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .contact-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-link {
+      color: white;
+      text-decoration: none;
+      opacity: 0.9;
+      transition: opacity 0.3s ease;
+    }
+
+    .contact-link:hover {
+      opacity: 1;
+    }
+
+    /* Enhanced Button */
+    .btn {
+      background: linear-gradient(135deg, #6415b7 0%, #8e44ad 100%);
+      color: white;
+      padding: 1rem 2rem;
+      text-decoration: none;
+      border-radius: 25px;
+      display: inline-block;
+      margin-top: 2rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+      transition: left 0.3s ease;
+      z-index: -1;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    /* Enhanced Footer */
+    footer {
+      background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      margin-top: 3rem;
+    }
+
+    /* Enhanced Responsive Design */
+    @media (max-width: 768px) {
+      header {
+        padding: 2rem 1rem;
+      }
+      
+      header h1 {
+        font-size: 2.2rem;
+      }
+      
+      .header-info {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .container {
+        padding: 1rem;
+      }
+      
+      .section {
+        padding: 2rem 1.5rem;
+        margin-bottom: 2rem;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+      }
+      
+      .feature-list {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      
+      .age-groups {
+        grid-template-columns: 1fr;
+      }
+      
+      .schedule-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 1.8rem;
+      }
+      
+      .section-title {
+        font-size: 1.7rem;
+      }
+      
+      .feature-list {
+        grid-template-columns: 1fr;
+      }
+      
+      .feature-item {
+        padding: 1.5rem;
+      }
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #6415b7 0%, #8e44ad 100%);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, #8e44ad 0%, #6415b7 100%);
+    }
+  </style>
 </head>
 <body>
   <header>
     <h1>Scholars Academy, Prague</h1>
-    <p>Visual Math Summer Camp<br />Age Groups: 3-16 | Starts July 2025<br />📧 hello@stem-intelligence.com | 📍 Primátorská 172/3, Praha 8-Libeň</p>
+    <p class="subtitle">Visual Math Summer Camp</p>
+    <div class="header-info">
+      <div class="info-item">
+        <span>👨‍👩‍👧‍👦</span>
+        <span>Ages 3-16</span>
+      </div>
+      <div class="info-item">
+        <span>📅</span>
+        <span>Starts July 2025</span>
+      </div>
+      <div class="info-item">
+        <span>📍</span>
+        <span>Prague 8-Libeň</span>
+      </div>
+    </div>
   </header>
 
-  <section>
-  <h2 class="section-title">About the Camp</h2>
-    <p>
-      At <strong>Scholars Academy</strong>, we believe math should be <em>fun, visual, and intuitive</em>.
-      Our <strong>Visual Math Summer Camp</strong> is a joyful journey into the world of numbers, shapes, patterns, and logic
-      - designed to build confidence, creativity, and a lifelong love of learning.
-    </p>
-
-    <p>
-      Children learn best through <strong>hands-on exploration</strong>, not memorization.
-      That is why our program blends math with <strong> stories, art, games, puzzles, and real-world discovery</strong>,
-      helping kids understand the <strong>"why"</strong> behind every concept.
-    </p>
-    <p>
-      Whether they are building patterns, cracking logic riddles, designing geometric art
-      or solving playful problems — they will be developing deep mathematical thinking through <strong>fun and imagination</strong>.
-    </p>
-
-    <blockquote>
-      <strong>
-        "We help Explore patterns, shapes, logic and much more — through visuals, discovery, and play!”
-      </strong>
-    </blockquote>
-    <p>
-      Our camp is about more than just numbers — it is about building <strong> confidence, curiosity, and critical thinking</strong>
-      in a safe and encouraging environment. Because math is all about understanding - not memorization!
-    </p>
- 
-      <h2 class="section-title">What Makes Us Different?</h2>
-      <ul style="list-style: none; padding-left: 0;">
-        <li>🔍 <strong>Visual & Hands-on Learning</strong> - From colorful patterns to geometry art, math is seen, touched, and created.</li>
-        <li>🎲 <strong>Games & Story-based Activities</strong> - Every lesson is a playful adventure — not a worksheet!</li>
-        <li>🧠 <strong>Deep Thinking, Not Memorization</strong> - Kids learn the "why" behind the "how", developing real understanding.</li>
-        <li>✨ <strong>Confidence-Building Environment</strong> - Encouragement, creativity, and joy are part of every session.</li>
-        <li>🎨 <strong>Integrated with Arts & Movement</strong> - Math meets imagination with crafts, puzzles, rhythm, and more.</li>
-        <li>🌱 <strong>Growth Mindset Focus</strong> - We celebrate mistakes and progress, not just answers.</li>
-        <li>🤝 <strong>Small Group Attention</strong> - Every child is seen, heard, and supported in their learning journey.</li>
-      </ul>
-    </section>
-   
-    <section>
-    <h2 class="section-title">Our Age Groups</h2>
-    <div class="circle-container">
-      <div class="circle" onclick="showDescription('explorers')">
-        <strong>Mini Explorers</strong><br />Ages 3-6
-      </div>
-      <div class="circle" onclick="showDescription('thinkers')">
-        <strong>Junior Thinkers</strong><br />Ages 7-10
-      </div>
-      <div class="circle" onclick="showDescription('champs')">
-        <strong>Senior Champs</strong><br />Ages 11-16
-      </div>
-    </div>
-    <div id="explorers" class="description-box">
-      <strong>Mini Explorers</strong> - Discovery through play, colors, shapes, and number stories.
-    </div>
-    <div id="thinkers" class="description-box">
-      <strong>Junior Thinkers</strong> - Puzzles, logic games and hands-on math experiments.
-    </div>
-    <div id="champs" class="description-box">
-      <strong>Senior Voyagers</strong> - Real world math challenges, visual proofs and fun competitions.
-    </div>
-  </section>
-
-  <section>
-    <h2 class="section-title">Schedule</h2>
-    <p>📅 <strong>6 Weeks</strong> | 🗓️ <strong>5 Days/Week</strong> | 🏫 <strong>In-person Program</strong></p>
-    <p><strong>Book your spot today and get an early bird discount!</strong></p>
-  </section>
-
-
-
-  <section class="contact">
-    <h2 class="section-title">Get in Touch</h2>
-    <p>
-        📧 Email: <strong>hello@stem-intelligence.com</strong><br />
-        📞 Call/WhatsApp: <strong><a href="https://wa.me/420734712218" target="_blank" style="color: inherit;">+420 734 712 218</a></strong><br />
-        👍 Facebook: <strong><a href="https://facebook.com/scholarsacademyprague" target="_blank" style="color: inherit;">Scholars Academy</a></strong><br />
-        📸 Instagram: <strong><a href="https://instagram.com/scholarsacademyprague" target="_blank" style="color: inherit;">@scholarsacademyprague</a></strong>
-
+  <div class="container">
+    <div class="section">
+      <h2 class="section-title">About the Camp</h2>
+      <p style="font-size: 1.1rem; text-align: center; margin-bottom: 2rem;">
+        At <strong>Scholars Academy</strong>, we believe math should be <em>fun, visual, and intuitive</em>.
+        Our <strong>Visual Math Summer Camp</strong> is a joyful journey into the world of numbers, shapes, patterns, and logic
+        - designed to build confidence, creativity, and a lifelong love of learning.
       </p>
-    <a href="https://forms.gle" class="btn">Enroll Now</a>
-  </section>
+      
+      <p style="font-size: 1.1rem; text-align: center; margin-bottom: 2rem;">
+        Children learn best through <strong>hands-on exploration</strong>, not memorization.
+        That's why our program blends math with <strong>stories, art, games, puzzles, and real-world discovery</strong>,
+        helping kids understand the <strong>"why"</strong> behind every concept.
+      </p>
+
+      <div style="background: linear-gradient(135deg, #6415b7 0%, #8e44ad 100%); color: white; padding: 2rem; border-radius: 15px; text-align: center; margin: 2rem 0;">
+        <h3 style="font-size: 1.4rem; margin-bottom: 1rem;">Our Mission</h3>
+        <p style="font-size: 1.1rem; opacity: 0.9;">
+          "We help explore patterns, shapes, logic and much more — through visuals, discovery, and play!"
+        </p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">What Makes Us Different?</h2>
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-icon">🔍</div>
+          <div class="feature-title">Visual & Hands-on Learning</div>
+          <p>From colorful patterns to geometry art, math is seen, touched, and created.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🎲</div>
+          <div class="feature-title">Games & Story-based Activities</div>
+          <p>Every lesson is a playful adventure — not a worksheet!</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🧠</div>
+          <div class="feature-title">Deep Thinking, Not Memorization</div>
+          <p>Kids learn the "why" behind the "how", developing real understanding.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">✨</div>
+          <div class="feature-title">Confidence-Building Environment</div>
+          <p>Encouragement, creativity, and joy are part of every session.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🎨</div>
+          <div class="feature-title">Integrated with Arts & Movement</div>
+          <p>Math meets imagination with crafts, puzzles, rhythm, and more.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🤝</div>
+          <div class="feature-title">Small Group Attention</div>
+          <p>Every child is seen, heard, and supported in their learning journey.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">Our Age Groups</h2>
+      <div class="age-groups">
+        <div style="background-color: #f79646;" class="age-group">
+          <h3>Mini Explorers</h3>
+          <div class="age-range">Ages 3-6</div>
+          <div class="age-description">Discovery through play, colors, shapes, and number stories.</div>
+        </div>
+        <div style="background-color: #006400;" class="age-group">
+          <h3>Junior Thinkers</h3>
+          <div class="age-range">Ages 7-10</div>
+          <div class="age-description">Puzzles, logic games and hands-on math experiments.</div>
+        </div>
+        <div style="background-color: #4bacc6;" class="age-group">
+          <h3>Senior Champs</h3>
+          <div class="age-range">Ages 11-16</div>
+          <div class="age-description">Real world math challenges, visual proofs and fun competitions.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">Camp Schedule</h2>
+      <div class="schedule-grid">
+        <div class="schedule-item">
+          <div class="schedule-icon">📅</div>
+          <div class="schedule-title">Duration</div>
+          <div>6 Weeks</div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-icon">🗓️</div>
+          <div class="schedule-title">Frequency</div>
+          <div>5 Days/Week</div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-icon">🏫</div>
+          <div class="schedule-title">Format</div>
+          <div>In-person Program</div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-icon">🎯</div>
+          <div class="schedule-title">Early Bird</div>
+          <div>Special Discount</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">Get in Touch</h2>
+      <div class="contact-grid">
+        <div class="contact-item">
+          <div class="contact-icon">📧</div>
+          <div class="contact-title">Email</div>
+          <a href="mailto:hello@stem-intelligence.com" class="contact-link">hello@stem-intelligence.com</a>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div class="contact-title">Phone/WhatsApp</div>
+          <a href="https://wa.me/420734712218" class="contact-link">+420 734 712 218</a>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><img src="assets/facebook.png" width="35px" height="35px"></div>
+          <div class="contact-title">Facebook</div>
+          <a href="https://facebook.com/scholarsacademyprague" class="contact-link">Scholars Academy</a>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📸</div>
+          <div class="contact-title">Instagram</div>
+          <a href="https://instagram.com/scholarsacademyprague" class="contact-link">@scholarsacademyprague</a>
+        </div>
+      </div>
+      <div style="text-align: center;">
+        <a href="https://forms.gle" class="btn">Enroll Now - Early Bird Discount!</a>
+      </div>
+    </div>
+  </div>
 
   <footer>
-    &copy; 2025 Scholars Academy Prague, A Project by STEM Intelligence SMC Private Limited. All rights reserved.
+    <p>&copy; 2025 Scholars Academy Prague, A Project by STEM Intelligence SMC Private Limited. All rights reserved.</p>
   </footer>
-
-  <script>
-    function showDescription(id) {
-      document.querySelectorAll('.description-box').forEach(box => box.style.display = 'none');
-      document.getElementById(id).style.display = 'block';
-    }
-  </script>
 </body>
 </html>
