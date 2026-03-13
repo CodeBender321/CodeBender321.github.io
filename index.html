@@ -1,382 +1,1541 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Scholars Academy | Visual Math Summer Camp Prague</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap"
-        rel="stylesheet">
-    <link rel="icon" href="assets/favicon-32x32.png" type="image/x-icon" />
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scholars Academy | Visual Math Summer Camp Prague</title>
+  <link href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Nunito:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:   #0B1654;
+      --violet: #6C3FF8;
+      --coral:  #FF5D6B;
+      --yellow: #FFC430;
+      --cyan:   #00C6E0;
+      --green:  #00D68F;
+      --pink:   #FF70A6;
+      --cream:  #FFF9F2;
+      --light:  #F4F0FF;
+      --white:  #ffffff;
+      --shadow-sm: 0 4px 14px rgba(11,22,84,.08);
+      --shadow-md: 0 10px 30px rgba(11,22,84,.14);
+      --shadow-lg: 0 20px 60px rgba(11,22,84,.18);
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+
+    body {
+      font-family:'Nunito', sans-serif;
+      background: var(--cream);
+      color: var(--navy);
+      overflow-x: hidden;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width:8px; }
+    ::-webkit-scrollbar-track { background:#f0ecff; }
+    ::-webkit-scrollbar-thumb { background: var(--violet); border-radius:99px; }
+
+    /* ─── LOADING SCREEN ─── */
+    #loader {
+      position:fixed; inset:0; z-index:9999;
+      background: var(--navy);
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      transition: opacity .5s ease, visibility .5s ease;
+    }
+    #loader.done { opacity:0; visibility:hidden; }
+    .loader-logo {
+      font-family:'Paytone One', sans-serif;
+      font-size:2.2rem;
+      color:white;
+      margin-bottom:1.5rem;
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+    .loader-bar-wrap { width:200px; height:6px; background:rgba(255,255,255,.15); border-radius:99px; overflow:hidden; }
+    .loader-bar { height:100%; background:linear-gradient(90deg,var(--violet),var(--cyan),var(--yellow)); border-radius:99px; animation:load-anim 1.8s ease forwards; }
+    @keyframes load-anim { 0%{width:0%} 100%{width:100%} }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.7;transform:scale(1.04)} }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      position:fixed; top:0; width:100%; z-index:1000;
+      padding:.9rem 0;
+      background:rgba(255,249,242,.92);
+      backdrop-filter:blur(20px);
+      border-bottom:1.5px solid rgba(108,63,248,.12);
+      transition: all .35s ease;
+    }
+    nav.scrolled {
+      box-shadow: 0 4px 24px rgba(11,22,84,.1);
+      padding:.7rem 0;
+    }
+    .nav-inner {
+      max-width:1240px; margin:0 auto;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 2rem;
+    }
+    .nav-brand {
+      display:flex; align-items:center; gap:.6rem;
+      text-decoration:none;
+    }
+    .nav-brand-icon {
+      width:40px; height:40px;
+      background:linear-gradient(135deg, var(--violet), var(--cyan));
+      border-radius:12px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.2rem;
+      box-shadow: 0 4px 12px rgba(108,63,248,.35);
+    }
+    .nav-brand-text {
+      font-family:'Paytone One', sans-serif;
+      font-size:1.3rem;
+      background:linear-gradient(135deg,var(--violet),var(--navy));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    .nav-links-wrap {
+      display:flex; align-items:center; gap:1.8rem;
+    }
+    .nav-links { list-style:none; display:flex; gap:1.8rem; }
+    .nav-links a {
+      text-decoration:none; font-weight:700; font-size:.88rem;
+      color: var(--navy); opacity:.75;
+      transition: opacity .2s, color .2s;
+      letter-spacing:.02em; text-transform:uppercase;
+    }
+    .nav-links a:hover { opacity:1; color: var(--violet); }
+    .nav-enroll {
+      background:linear-gradient(135deg, var(--violet), #9b5cf6);
+      color:white; font-weight:800; font-size:.9rem;
+      padding:.65rem 1.5rem; border-radius:50px;
+      text-decoration:none;
+      box-shadow: 0 4px 16px rgba(108,63,248,.4);
+      transition: transform .25s, box-shadow .25s;
+      white-space:nowrap;
+    }
+    .nav-enroll:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(108,63,248,.5); }
+    .nav-burger { display:none; background:none; border:none; cursor:pointer; font-size:1.5rem; color:var(--navy); }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height:100vh;
+      background: linear-gradient(160deg, #0B1654 0%, #1a2d8f 45%, #2d1b69 100%);
+      display:flex; align-items:center;
+      padding-top:80px;
+      position:relative; overflow:hidden;
+    }
+    .hero-orbs {
+      position:absolute; inset:0; pointer-events:none;
+      z-index:0;
+    }
+    .orb {
+      position:absolute; border-radius:50%;
+      filter:blur(80px); opacity:.35;
+    }
+    .orb-1 { width:500px; height:500px; background:var(--violet); top:-120px; left:-100px; }
+    .orb-2 { width:400px; height:400px; background:var(--cyan); bottom:-100px; right:-80px; }
+    .orb-3 { width:250px; height:250px; background:var(--coral); top:30%; right:20%; }
+    .orb-4 { width:180px; height:180px; background:var(--yellow); bottom:20%; left:30%; }
+
+    /* floating math symbols */
+    .math-particle {
+      position:absolute; font-family:'Paytone One',sans-serif;
+      font-size:1.4rem; color:rgba(255,255,255,.15);
+      animation: drift linear infinite;
+      pointer-events:none; user-select:none;
+    }
+    @keyframes drift {
+      0%   { transform:translateY(0) rotate(0deg); opacity:0; }
+      10%  { opacity:1; }
+      90%  { opacity:.8; }
+      100% { transform:translateY(-100vh) rotate(360deg); opacity:0; }
+    }
+
+    .hero-inner {
+      max-width:1240px; margin:0 auto; padding:4rem 2rem;
+      display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:center;
+      position:relative; z-index:1;
+    }
+
+    .hero-badge {
+      display:inline-flex; align-items:center; gap:.5rem;
+      background:rgba(255,196,48,.18); border:1.5px solid rgba(255,196,48,.4);
+      color:var(--yellow); font-weight:800; font-size:.82rem;
+      padding:.45rem 1rem; border-radius:50px; letter-spacing:.05em;
+      margin-bottom:1.5rem;
+      animation: fadeSlideUp .6s ease both;
+    }
+    .hero-badge-dot { width:8px; height:8px; background:var(--yellow); border-radius:50%; animation:blink 1.4s ease infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    .hero-title {
+      font-family:'Paytone One', sans-serif;
+      font-size:clamp(2.4rem,5vw,4rem);
+      color:white; line-height:1.15;
+      margin-bottom:1.2rem;
+      animation: fadeSlideUp .7s .1s ease both;
+    }
+    .hero-title span { color: var(--yellow); }
+    .hero-title em { color: var(--cyan); font-style:normal; }
+
+    .hero-tagline {
+      font-size:1.15rem; font-weight:600; color:rgba(255,255,255,.75);
+      margin-bottom:1.5rem; line-height:1.7;
+      animation: fadeSlideUp .7s .2s ease both;
+    }
+
+    .hero-stats {
+      display:flex; gap:2rem; margin-bottom:2.5rem;
+      animation: fadeSlideUp .7s .3s ease both;
+    }
+    .hero-stat {
+      text-align:center;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      padding:.8rem 1.4rem; border-radius:16px;
+      backdrop-filter:blur(12px);
+      flex:1;
+    }
+    .hero-stat-num {
+      font-family:'Paytone One',sans-serif;
+      font-size:1.8rem; color:var(--yellow);
+      display:block; line-height:1;
+      margin-bottom:.25rem;
+    }
+    .hero-stat-label { font-size:.78rem; font-weight:700; color:rgba(255,255,255,.6); text-transform:uppercase; letter-spacing:.06em; }
+
+    .hero-cta-row {
+      display:flex; gap:1rem; flex-wrap:wrap;
+      animation: fadeSlideUp .7s .4s ease both;
+    }
+    .btn-hero-primary {
+      background: linear-gradient(135deg, var(--yellow), #ff8c00);
+      color: var(--navy); font-weight:900; font-size:1rem;
+      padding:1rem 2.2rem; border-radius:50px; text-decoration:none;
+      box-shadow: 0 6px 24px rgba(255,196,48,.45);
+      transition: transform .25s, box-shadow .25s;
+      display:inline-flex; align-items:center; gap:.5rem;
+    }
+    .btn-hero-primary:hover { transform:translateY(-3px); box-shadow:0 12px 32px rgba(255,196,48,.5); }
+    .btn-hero-outline {
+      background:transparent; color:white; font-weight:800; font-size:1rem;
+      padding:1rem 2rem; border-radius:50px; text-decoration:none;
+      border:2px solid rgba(255,255,255,.3);
+      backdrop-filter:blur(10px);
+      transition: all .25s;
+      display:inline-flex; align-items:center; gap:.5rem;
+    }
+    .btn-hero-outline:hover { border-color:rgba(255,255,255,.7); background:rgba(255,255,255,.08); transform:translateY(-3px); }
+
+    @keyframes fadeSlideUp {
+      from { opacity:0; transform:translateY(28px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* Hero illustration */
+    .hero-illustration { position:relative; display:flex; justify-content:center; align-items:center; animation: fadeSlideUp .9s .2s ease both; }
+    .hero-illustration svg { max-width:460px; width:100%; filter: drop-shadow(0 30px 60px rgba(0,0,0,.4)); }
+
+    /* floating shapes around illustration */
+    .float-badge {
+      position:absolute;
+      background:white;
+      border-radius:16px;
+      padding:.6rem 1rem;
+      box-shadow: var(--shadow-md);
+      display:flex; align-items:center; gap:.5rem;
+      font-weight:800; font-size:.85rem; color:var(--navy);
+      animation: floatBob 4s ease-in-out infinite;
+      white-space:nowrap;
+    }
+    .float-badge:nth-child(2) { animation-delay:1s; }
+    .float-badge:nth-child(3) { animation-delay:2s; }
+    @keyframes floatBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    .float-badge-1 { top:8%; right:-10%; }
+    .float-badge-2 { bottom:20%; left:-12%; }
+    .float-badge-3 { bottom:5%; right:5%; }
+    .float-dot { width:10px; height:10px; border-radius:50%; }
+
+    /* ─── TRUST STRIP ─── */
+    .trust-strip {
+      background:white;
+      padding:1.6rem 0;
+      border-bottom: 2px solid #f0ecff;
+    }
+    .trust-inner {
+      max-width:1240px; margin:0 auto; padding:0 2rem;
+      display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:2.5rem;
+    }
+    .trust-item {
+      display:flex; align-items:center; gap:.7rem;
+      font-weight:800; font-size:.9rem; color:var(--navy);
+    }
+    .trust-icon-wrap {
+      width:36px; height:36px; border-radius:10px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1rem;
+    }
+    .trust-divider { width:1px; height:28px; background:#e8e0ff; }
+
+    /* ─── SECTIONS ─── */
+    .section { padding:6rem 0; }
+    .container { max-width:1240px; margin:0 auto; padding:0 2rem; }
+    .section-tag {
+      display:inline-flex; align-items:center; gap:.5rem;
+      font-weight:800; font-size:.78rem; letter-spacing:.1em; text-transform:uppercase;
+      color:var(--violet); margin-bottom:.8rem;
+    }
+    .section-tag::before { content:''; display:inline-block; width:20px; height:3px; background:var(--violet); border-radius:2px; }
+    .section-title {
+      font-family:'Paytone One', sans-serif;
+      font-size:clamp(2rem,3.5vw,3rem); color:var(--navy);
+      line-height:1.2; margin-bottom:1rem;
+    }
+    .section-title span { color:var(--violet); }
+    .section-subtitle {
+      font-size:1.05rem; color:#5e6e9e; max-width:580px;
+      line-height:1.8; font-weight:500;
+    }
+    .section-header { margin-bottom:3.5rem; }
+    .section-header.center { text-align:center; }
+    .section-header.center .section-subtitle { margin:0 auto; }
+    .section-header.center .section-tag { justify-content:center; }
+    .section-header.center .section-tag::before { display:none; }
+    .section-header.center .section-tag::after { content:''; display:inline-block; width:20px; height:3px; background:var(--violet); border-radius:2px; }
+
+    /* ─── WHY SECTION ─── */
+    .why-section { background:white; }
+    .why-section .section-header { max-width:700px; }
+    .why-layout { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
+    .why-illustration svg { width:100%; max-width:480px; }
+
+    .features-grid {
+      display:grid; grid-template-columns:1fr 1fr; gap:1.2rem;
+    }
+    .feat-card {
+      background:var(--light); border-radius:20px; padding:1.5rem;
+      border:2px solid transparent;
+      transition: all .3s ease;
+      cursor:default;
+      position:relative; overflow:hidden;
+    }
+    .feat-card:hover {
+      border-color: var(--violet);
+      background:white;
+      box-shadow: var(--shadow-md);
+      transform:translateY(-4px);
+    }
+    .feat-card::after {
+      content:''; position:absolute; top:0; left:0;
+      width:4px; height:100%; background:linear-gradient(180deg, var(--violet), var(--cyan));
+      border-radius:99px 0 0 99px;
+      transform:scaleY(0); transition:transform .3s;
+    }
+    .feat-card:hover::after { transform:scaleY(1); }
+    .feat-icon {
+      width:44px; height:44px; border-radius:12px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.3rem; margin-bottom:1rem;
+    }
+    .feat-title { font-weight:800; font-size:1rem; color:var(--navy); margin-bottom:.35rem; }
+    .feat-desc { font-size:.85rem; color:#5e6e9e; line-height:1.6; font-weight:500; }
+
+    /* ─── PROGRAMS SECTION ─── */
+    .programs-section { background: linear-gradient(160deg, #0f1c5c 0%, #1a1060 50%, #0d2a5c 100%); position:relative; overflow:hidden; }
+    .programs-section .section-tag { color:var(--cyan); }
+    .programs-section .section-tag::before { background:var(--cyan); }
+    .programs-section .section-title { color:white; }
+    .programs-section .section-title span { color:var(--yellow); }
+    .programs-section .section-subtitle { color:rgba(255,255,255,.65); }
+    .programs-bg-orb { position:absolute; border-radius:50%; filter:blur(100px); opacity:.2; pointer-events:none; }
+    .programs-bg-orb-1 { width:600px; height:600px; background:var(--violet); top:-200px; right:-150px; }
+    .programs-bg-orb-2 { width:400px; height:400px; background:var(--cyan); bottom:-100px; left:-80px; }
+
+    .age-cards-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.8rem; }
+    .age-card {
+      border-radius:24px; overflow:hidden;
+      background:rgba(255,255,255,.06);
+      border:1.5px solid rgba(255,255,255,.12);
+      backdrop-filter:blur(20px);
+      transition:all .35s ease;
+    }
+    .age-card:hover {
+      transform:translateY(-12px);
+      background:rgba(255,255,255,.1);
+      border-color:rgba(255,255,255,.3);
+      box-shadow: 0 30px 60px rgba(0,0,0,.35);
+    }
+    .age-card-header {
+      padding:2rem; text-align:center; position:relative; overflow:hidden;
+    }
+    .age-card-header.mini   { background:linear-gradient(135deg,#FF9050,#FF5D6B); }
+    .age-card-header.junior { background:linear-gradient(135deg,#00D68F,#00a8b5); }
+    .age-card-header.senior { background:linear-gradient(135deg,#6C3FF8,#00C6E0); }
+    .age-card-header::after {
+      content:''; position:absolute; bottom:-20px; left:50%; transform:translateX(-50%);
+      width:130%; height:50px;
+      background:inherit;
+      border-radius:50%;
+    }
+    .age-card-emoji { font-size:2.8rem; display:block; margin-bottom:.7rem; position:relative; z-index:1; }
+    .age-card-name { font-family:'Paytone One',sans-serif; font-size:1.5rem; color:white; position:relative; z-index:1; }
+    .age-card-range {
+      display:inline-block;
+      background:rgba(255,255,255,.25); color:white;
+      font-weight:800; font-size:.78rem; padding:.3rem .9rem; border-radius:50px;
+      margin-top:.5rem; position:relative; z-index:1;
+    }
+    .age-card-body { padding:2.2rem 2rem 2rem; }
+    .age-card-desc { color:rgba(255,255,255,.65); font-size:.9rem; line-height:1.7; margin-bottom:1.4rem; font-weight:500; }
+    .age-features { list-style:none; }
+    .age-features li {
+      display:flex; align-items:center; gap:.7rem;
+      font-size:.88rem; font-weight:700; color:rgba(255,255,255,.85);
+      padding:.45rem 0;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .age-features li:last-child { border:none; }
+    .age-check {
+      width:22px; height:22px; border-radius:6px; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center;
+      font-size:.75rem;
+    }
+    .mini .age-check   { background:rgba(255,255,255,.25); }
+    .junior .age-check { background:rgba(255,255,255,.25); }
+    .senior .age-check { background:rgba(255,255,255,.25); }
+
+    /* ─── SCHEDULE ─── */
+    .schedule-section { background:var(--cream); }
+    .schedule-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
+    .sched-card {
+      background:white; border-radius:22px; padding:2rem;
+      text-align:center;
+      box-shadow: var(--shadow-sm);
+      border:2px solid transparent;
+      transition:all .3s ease;
+    }
+    .sched-card:hover { transform:translateY(-6px); box-shadow:var(--shadow-md); border-color:#e8e0ff; }
+    .sched-emoji {
+      width:64px; height:64px; border-radius:20px; margin:0 auto 1.2rem;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.8rem;
+    }
+    .sched-label { font-size:.78rem; font-weight:800; color:#8f9ec4; text-transform:uppercase; letter-spacing:.08em; margin-bottom:.4rem; }
+    .sched-value { font-family:'Paytone One',sans-serif; font-size:1.15rem; color:var(--navy); line-height:1.3; }
+    .sched-sub { font-size:.82rem; font-weight:600; color:#b0bbd8; margin-top:.3rem; }
+
+    /* ─── GALLERY SPLASH ─── */
+    .gallery-section { background:white; overflow:hidden; }
+    .gallery-scroll {
+      display:flex; gap:1.5rem; overflow:hidden;
+      margin:0 -2rem; padding:0 2rem;
+    }
+    .gallery-track {
+      display:flex; gap:1.5rem;
+      animation: scroll-gallery 28s linear infinite;
+      width:max-content;
+    }
+    .gallery-track:hover { animation-play-state:paused; }
+    @keyframes scroll-gallery {
+      0%  { transform:translateX(0); }
+      100%{ transform:translateX(-50%); }
+    }
+    .gallery-card {
+      flex-shrink:0; width:260px; height:180px;
+      border-radius:20px; overflow:hidden;
+      position:relative;
+    }
+    .gallery-card svg { width:100%; height:100%; }
+    .gallery-card-label {
+      position:absolute; bottom:.8rem; left:.8rem; right:.8rem;
+      background:rgba(11,22,84,.75); backdrop-filter:blur(8px);
+      color:white; font-size:.78rem; font-weight:800;
+      padding:.4rem .8rem; border-radius:10px;
+    }
+
+    /* ─── TESTIMONIAL ─── */
+    .testimonial-section {
+      background:linear-gradient(135deg, #f4f0ff 0%, #fff9f2 100%);
+      padding:5rem 0;
+    }
+    .testimonials-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.8rem; }
+    .testi-card {
+      background:white; border-radius:24px; padding:2rem;
+      box-shadow:var(--shadow-sm);
+      border:2px solid #f0ecff;
+      transition:all .3s;
+    }
+    .testi-card:hover { transform:translateY(-6px); box-shadow:var(--shadow-md); border-color:var(--violet); }
+    .testi-stars { display:flex; gap:.2rem; margin-bottom:1rem; font-size:1rem; }
+    .testi-text { font-size:.93rem; color:#4a5980; line-height:1.8; font-weight:500; margin-bottom:1.5rem; font-style:italic; }
+    .testi-author { display:flex; align-items:center; gap:.8rem; }
+    .testi-avatar {
+      width:44px; height:44px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.3rem; flex-shrink:0;
+    }
+    .testi-name { font-weight:800; font-size:.9rem; color:var(--navy); }
+    .testi-role { font-size:.78rem; color:#8f9ec4; font-weight:600; }
+
+    /* ─── CONTACT ─── */
+    .contact-section {
+      background: linear-gradient(155deg, #0B1654 0%, #1e0d4a 100%);
+      position:relative; overflow:hidden;
+    }
+    .contact-section .section-title { color:white; }
+    .contact-section .section-title span { color:var(--yellow); }
+    .contact-section .section-subtitle { color:rgba(255,255,255,.6); }
+    .contact-section .section-tag { color:var(--cyan); }
+    .contact-section .section-tag::before { background:var(--cyan); }
+    .contact-wave-top {
+      position:absolute; top:0; left:0; right:0; height:80px;
+      background:var(--cream); clip-path:ellipse(55% 100% at 50% 0);
+    }
+    .contact-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1.5rem; margin-bottom:3rem; }
+    .contact-card {
+      background:rgba(255,255,255,.07);
+      border:1.5px solid rgba(255,255,255,.12);
+      border-radius:22px; padding:1.8rem; text-align:center;
+      transition:all .3s;
+      cursor:default;
+    }
+    .contact-card:hover { background:rgba(255,255,255,.13); transform:translateY(-6px); border-color:rgba(255,255,255,.3); }
+    .contact-card-icon {
+      width:56px; height:56px; border-radius:16px; margin:0 auto 1.2rem;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.6rem;
+    }
+    .contact-card-title { font-weight:800; color:white; font-size:1rem; margin-bottom:.5rem; }
+    .contact-card-val {
+      color:rgba(255,255,255,.65); font-size:.87rem; font-weight:600;
+      text-decoration:none; transition:color .2s;
+      display:block; word-break:break-all;
+    }
+    .contact-card-val:hover { color:var(--cyan); }
+
+    .cta-big {
+      text-align:center; background:rgba(255,255,255,.05);
+      border:1.5px solid rgba(255,255,255,.12);
+      border-radius:28px; padding:3.5rem 2rem;
+    }
+    .cta-big-title {
+      font-family:'Paytone One',sans-serif;
+      font-size:clamp(1.8rem,3vw,2.5rem); color:white; margin-bottom:.8rem;
+    }
+    .cta-big-sub { color:rgba(255,255,255,.6); font-weight:600; margin-bottom:2rem; font-size:1rem; }
+    .btn-cta-yellow {
+      background:linear-gradient(135deg,var(--yellow),#ff8c00);
+      color:var(--navy); font-weight:900; font-size:1.1rem;
+      padding:1.1rem 3rem; border-radius:50px; text-decoration:none;
+      display:inline-flex; align-items:center; gap:.6rem;
+      box-shadow: 0 8px 30px rgba(255,196,48,.45);
+      transition:all .3s;
+    }
+    .btn-cta-yellow:hover { transform:translateY(-4px); box-shadow:0 14px 40px rgba(255,196,48,.55); }
+    .cta-note { color:rgba(255,255,255,.4); font-size:.83rem; font-weight:600; margin-top:1.2rem; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background:#070e30;
+      color:rgba(255,255,255,.55);
+      text-align:center;
+      padding:3rem 2rem 2rem;
+    }
+    .footer-logo {
+      font-family:'Paytone One',sans-serif; font-size:1.6rem;
+      background:linear-gradient(135deg,var(--yellow),var(--cyan));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text; margin-bottom:.8rem;
+    }
+    .footer-sub { font-size:.88rem; margin-bottom:2rem; font-weight:600; line-height:1.7; }
+    .footer-links { display:flex; justify-content:center; gap:2rem; flex-wrap:wrap; margin-bottom:2rem; }
+    .footer-links a { color:rgba(255,255,255,.45); text-decoration:none; font-size:.85rem; font-weight:700; transition:color .2s; }
+    .footer-links a:hover { color:var(--yellow); }
+    .footer-divider { height:1px; background:rgba(255,255,255,.07); margin:1.5rem 0; max-width:600px; margin-left:auto; margin-right:auto; }
+    .footer-copy { font-size:.8rem; }
+
+    /* ─── ANIMATIONS ─── */
+    .reveal {
+      opacity:0; transform:translateY(32px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+    .reveal.visible { opacity:1; transform:none; }
+    .reveal-delay-1 { transition-delay:.1s; }
+    .reveal-delay-2 { transition-delay:.2s; }
+    .reveal-delay-3 { transition-delay:.3s; }
+    .reveal-delay-4 { transition-delay:.4s; }
+    .reveal-delay-5 { transition-delay:.5s; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width:1024px) {
+      .age-cards-grid { grid-template-columns:1fr 1fr; }
+      .contact-grid { grid-template-columns:1fr 1fr; }
+      .schedule-grid { grid-template-columns:repeat(3,1fr); }
+    }
+    @media (max-width:768px) {
+      .hero-inner { grid-template-columns:1fr; text-align:center; }
+      .hero-stats { justify-content:center; }
+      .hero-illustration { order:-1; }
+      .hero-badge { margin-left:auto; margin-right:auto; }
+      .hero-cta-row { justify-content:center; }
+      .float-badge-1, .float-badge-2, .float-badge-3 { display:none; }
+      .why-layout { grid-template-columns:1fr; }
+      .features-grid { grid-template-columns:1fr; }
+      .age-cards-grid { grid-template-columns:1fr; }
+      .schedule-grid { grid-template-columns:1fr 1fr; }
+      .testimonials-grid { grid-template-columns:1fr; }
+      .contact-grid { grid-template-columns:1fr 1fr; }
+      .nav-links-wrap { display:none; }
+      .nav-links-wrap.open {
+      display:flex; flex-direction:column; align-items:stretch;
+      position:fixed; top:70px; left:0; right:0;
+      background:white; padding:1.5rem 2rem 2rem;
+      gap:.5rem; box-shadow:0 20px 40px rgba(0,0,0,.12);
+      z-index:999;
+    }
+    .nav-links-wrap.open .nav-links {
+      flex-direction:column; gap:0;
+    }
+    .nav-links-wrap.open .nav-links li {
+      border-bottom:1px solid #f0ecff;
+    }
+    .nav-links-wrap.open .nav-links a {
+      display:block; padding:.85rem .25rem;
+      font-size:1rem; opacity:1;
+    }
+    .nav-links-wrap.open .nav-enroll {
+      display:block; text-align:center;
+      margin-top:.75rem; padding:1rem;
+    }
+      .nav-burger { display:block; }
+    }
+    @media (max-width:480px) {
+      .schedule-grid { grid-template-columns:1fr; }
+      .contact-grid { grid-template-columns:1fr; }
+      .trust-divider { display:none; }
+    }
+
+    /* ripple on enroll btn */
+    .btn-ripple { position:relative; overflow:hidden; }
+    .btn-ripple::after {
+      content:''; position:absolute; border-radius:50%;
+      background:rgba(255,255,255,.4);
+      width:0; height:0; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      transition:width .5s, height .5s, opacity .5s;
+      opacity:0;
+    }
+    .btn-ripple:active::after { width:300px; height:300px; opacity:0; }
+  </style>
 </head>
 <body>
-    <nav>
-        <div class="nav-container">
-            <div class="logo">Scholars Academy</div>
-            <button class="mobile-menu-btn">☰</button>
-            <div class="nav-menu">
-                <ul class="nav-links">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#programs">Programs</a></li>
-                    <li><a href="#schedule">Schedule</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                    <li><a href="https://doodleshapes.netlify.app/">CheckOut-DoodleShapes</a></li>
-                </ul>
-                <a href="#contact" class="nav-cta">Enroll Now</a>
-            </div>
 
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">🧮 Scholars Academy</div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#home" class="nav-brand">
+      <div class="nav-brand-icon">🧮</div>
+      <span class="nav-brand-text">Scholars Academy</span>
+    </a>
+    <button class="nav-burger" id="navBurger" aria-label="Menu">☰</button>
+    <div class="nav-links-wrap" id="navMenu">
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#programs">Programs</a></li>
+        <li><a href="#schedule">Schedule</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="https://doodleshapes.netlify.app/" target="_blank">DoodleShapes</a></li>
+      </ul>
+      <a href="#contact" class="nav-enroll btn-ripple">Enroll Now 🎉</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<section id="home" class="hero">
+  <div class="hero-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+  </div>
+  <!-- Floating math particles generated by JS -->
+  <div id="mathParticles"></div>
+
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <div class="hero-badge-dot"></div>
+        ✨ Enrolling Now — Prague, July 2025
+      </div>
+      <h1 class="hero-title">
+        Visual <span>Math</span><br>
+        Summer <em>Camp</em>
+      </h1>
+      <p class="hero-tagline">
+        Where mathematics meets imagination 🚀<br>
+        Ages 3–16 · Prague · 6 Weeks of Pure Discovery
+      </p>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="hero-stat-num" data-count="6">6</span>
+          <span class="hero-stat-label">Weeks</span>
         </div>
-    </nav>
-
-    <section id="home" class="hero">
-        <div class="hero-container">
-            <div class="hero-content">
-                <h1>Visual Math Summer Camp</h1>
-                <p class="subtitle">Where Mathematics Meets Imagination</p>
-                <p>Transform your child's relationship with math through our innovative visual learning approach. We
-                    make mathematics fun, intuitive, and accessible for every young mind.</p>
-
-                <div class="hero-stats">
-                    <div class="stat-item">
-                        <span class="stat-number">6</span>
-                        <span class="stat-label">Weeks Program</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">3-16</span>
-                        <span class="stat-label">Age Groups</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">5</span>
-                        <span class="stat-label">Days/Week</span>
-                    </div>
-                </div>
-
-                <div class="hero-cta" style="padding-bottom: 20px;">
-                    <a href="#contact" class="btn-primary">Start Your Journey</a><br><br><br>
-                    <a href="#about" class="btn-secondary">Learn More</a>
-                </div>
-            </div>
-
-            <div class="hero-visual">
-                <div class="floating-shapes">
-                    <div class="shape">🧮</div>
-                    <div class="shape">📐</div>
-                    <div class="shape">🔢</div>
-                    <div class="shape">🎯</div>
-                </div>
-            </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">3–16</span>
+          <span class="hero-stat-label">Age Groups</span>
         </div>
-    </section>
-
-    <section id="about" class="section">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Why Choose Visual Math?</h2>
-                <p class="section-subtitle">We believe every child can excel in mathematics when learning is visual,
-                    engaging, and built on understanding rather than memorization.</p>
-            </div>
-
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">👁️</div>
-                    <h3 class="feature-title">Visual Learning</h3>
-                    <p class="feature-description">Transform abstract concepts into tangible, visual experiences that
-                        make math intuitive and memorable.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🎮</div>
-                    <h3 class="feature-title">Gamified Experience</h3>
-                    <p class="feature-description">Every lesson becomes an exciting adventure through games, puzzles,
-                        and interactive challenges.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🧠</div>
-                    <h3 class="feature-title">Deep Understanding</h3>
-                    <p class="feature-description">Focus on the 'why' behind mathematical concepts, building strong
-                        foundations for lifelong learning.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🎨</div>
-                    <h3 class="feature-title">Creative Integration</h3>
-                    <p class="feature-description">Blend mathematics with art, movement, and storytelling for a holistic
-                        learning experience.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">👥</div>
-                    <h3 class="feature-title">Small Groups</h3>
-                    <p class="feature-description">Personalized attention in small group settings ensures every child's
-                        unique learning needs are met.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🌟</div>
-                    <h3 class="feature-title">Confidence Building</h3>
-                    <p class="feature-description">Create a supportive environment where children develop confidence and
-                        joy in mathematical thinking.</p>
-                </div>
-            </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num" data-count="5">5</span>
+          <span class="hero-stat-label">Days / Week</span>
         </div>
-    </section>
+      </div>
+      <div class="hero-cta-row">
+        <a href="#contact" class="btn-hero-primary btn-ripple">🎯 Start Your Journey</a>
+        <a href="#about" class="btn-hero-outline">▶ Learn More</a>
+      </div>
+    </div>
 
-    <section id="programs" class="section" style="background: #f8fafc;">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Age-Appropriate Programs</h2>
-                <p class="section-subtitle">Carefully designed curricula that match developmental stages and learning
-                    abilities.</p>
-            </div>
+    <div class="hero-illustration">
+      <!-- Hero illustration: child explorer with math elements -->
+      <svg viewBox="0 0 460 480" xmlns="http://www.w3.org/2000/svg" aria-label="Child explorer with math elements">
+        <defs>
+          <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#6C3FF8" stop-opacity=".35"/>
+            <stop offset="100%" stop-color="#6C3FF8" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="skinGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#FFBE9D"/>
+            <stop offset="100%" stop-color="#FFD7BA"/>
+          </linearGradient>
+          <linearGradient id="shirtGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#6C3FF8"/>
+            <stop offset="100%" stop-color="#00C6E0"/>
+          </linearGradient>
+          <linearGradient id="bgCircle" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="rgba(108,63,248,.2)"/>
+            <stop offset="100%" stop-color="rgba(0,198,224,.15)"/>
+          </linearGradient>
+          <filter id="softShadow"><feDropShadow dx="0" dy="8" stdDeviation="15" flood-color="#000" flood-opacity=".25"/></filter>
+        </defs>
 
-            <div class="age-groups">
-                <div class="age-card">
-                    <div class="age-header mini">
-                        <h3 class="age-title">Mini Explorers</h3>
-                        <p class="age-range">Ages 3-6</p>
-                    </div>
-                    <div class="age-content">
-                        <p class="age-description">Foundation building through play-based learning, introducing basic
-                            concepts through stories, colors, and hands-on activities.</p>
-                        <ul class="age-features">
-                            <li>Number recognition and counting</li>
-                            <li>Shape and pattern exploration</li>
-                            <li>Spatial reasoning through play</li>
-                            <li>Mathematical storytelling</li>
-                        </ul>
-                    </div>
-                </div>
+        <!-- Background glow circle -->
+        <circle cx="230" cy="240" r="210" fill="url(#bgCircle)" opacity=".7"/>
+        <circle cx="230" cy="240" r="180" fill="url(#glowGrad)"/>
 
-                <div class="age-card">
-                    <div class="age-header junior">
-                        <h3 class="age-title">Junior Thinkers</h3>
-                        <p class="age-range">Ages 7-10</p>
-                    </div>
-                    <div class="age-content">
-                        <p class="age-description">Developing logical thinking through puzzles, games, and hands-on
-                            experiments that make abstract concepts concrete.</p>
-                        <ul class="age-features">
-                            <li>Problem-solving strategies</li>
-                            <li>Geometric construction</li>
-                            <li>Mathematical reasoning</li>
-                            <li>Real-world applications</li>
-                        </ul>
-                    </div>
-                </div>
+        <!-- Orbit rings -->
+        <circle cx="230" cy="240" r="175" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1.5" stroke-dasharray="8 6"/>
+        <circle cx="230" cy="240" r="140" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="1.5" stroke-dasharray="5 8"/>
 
-                <div class="age-card">
-                    <div class="age-header senior">
-                        <h3 class="age-title">Senior Voyagers</h3>
-                        <p class="age-range">Ages 11-16</p>
-                    </div>
-                    <div class="age-content">
-                        <p class="age-description">Advanced mathematical thinking through challenging problems, visual
-                            proofs, and competitive mathematics.</p>
-                        <ul class="age-features">
-                            <li>Advanced problem solving</li>
-                            <li>Mathematical competitions</li>
-                            <li>Visual proof techniques</li>
-                            <li>Real-world modeling</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+        <!-- Math symbols orbiting -->
+        <!-- Top: π -->
+        <g transform="translate(217,55)">
+          <rect width="50" height="50" rx="14" fill="rgba(255,196,48,.2)" stroke="rgba(255,196,48,.6)" stroke-width="1.5"/>
+          <text x="25" y="34" font-family="Georgia,serif" font-size="22" font-weight="700" fill="#FFC430" text-anchor="middle">π</text>
+        </g>
+        <!-- Right: ∑ -->
+        <g transform="translate(375,120)">
+          <rect width="48" height="48" rx="13" fill="rgba(0,198,224,.2)" stroke="rgba(0,198,224,.6)" stroke-width="1.5"/>
+          <text x="24" y="33" font-family="Georgia,serif" font-size="22" font-weight="700" fill="#00C6E0" text-anchor="middle">∑</text>
+        </g>
+        <!-- Bottom-right: % -->
+        <g transform="translate(360,330)">
+          <rect width="48" height="48" rx="13" fill="rgba(255,93,107,.2)" stroke="rgba(255,93,107,.6)" stroke-width="1.5"/>
+          <text x="24" y="34" font-family="Arial,sans-serif" font-size="19" font-weight="700" fill="#FF5D6B" text-anchor="middle">%</text>
+        </g>
+        <!-- Left: ÷ -->
+        <g transform="translate(26,200)">
+          <rect width="48" height="48" rx="13" fill="rgba(0,214,143,.2)" stroke="rgba(0,214,143,.6)" stroke-width="1.5"/>
+          <text x="24" y="34" font-family="Arial,sans-serif" font-size="22" font-weight="700" fill="#00D68F" text-anchor="middle">÷</text>
+        </g>
+        <!-- Top-left: ∞ -->
+        <g transform="translate(50,80)">
+          <rect width="50" height="48" rx="13" fill="rgba(255,112,166,.2)" stroke="rgba(255,112,166,.6)" stroke-width="1.5"/>
+          <text x="25" y="34" font-family="Georgia,serif" font-size="22" font-weight="700" fill="#FF70A6" text-anchor="middle">∞</text>
+        </g>
+        <!-- Bottom: = -->
+        <g transform="translate(200,410)">
+          <rect width="60" height="48" rx="13" fill="rgba(108,63,248,.25)" stroke="rgba(108,63,248,.7)" stroke-width="1.5"/>
+          <text x="30" y="33" font-family="Arial,sans-serif" font-size="20" font-weight="700" fill="#a87fff" text-anchor="middle">x²+y²</text>
+        </g>
+
+        <!-- Triangle decoration -->
+        <polygon points="380,240 370,265 390,265" fill="rgba(255,196,48,.3)" stroke="#FFC430" stroke-width="1.5"/>
+
+        <!-- Square decoration -->
+        <rect x="60" y="300" width="30" height="30" rx="5" fill="rgba(0,198,224,.2)" stroke="#00C6E0" stroke-width="1.5" transform="rotate(15,75,315)"/>
+
+        <!-- Circle decoration -->
+        <circle cx="400" cy="200" r="12" fill="rgba(255,93,107,.25)" stroke="#FF5D6B" stroke-width="1.5"/>
+
+        <!-- CHILD CHARACTER (simplified but expressive) -->
+        <g filter="url(#softShadow)" transform="translate(115,100)">
+          <!-- Body / shirt -->
+          <ellipse cx="115" cy="245" rx="65" ry="80" fill="url(#shirtGrad)"/>
+          <!-- Collar -->
+          <path d="M90,190 Q115,210 140,190" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2"/>
+          <!-- Arms -->
+          <path d="M55,220 Q20,230 15,270" fill="none" stroke="url(#shirtGrad)" stroke-width="28" stroke-linecap="round"/>
+          <path d="M175,220 Q210,230 215,270" fill="none" stroke="url(#shirtGrad)" stroke-width="28" stroke-linecap="round"/>
+          <!-- Left hand holding calculator SVG shape -->
+          <rect x="-2" y="263" width="36" height="28" rx="8" fill="#FFC430" stroke="#e0a800" stroke-width="1.5"/>
+          <rect x="2" y="268" width="10" height="6" rx="2" fill="rgba(255,255,255,.6)"/>
+          <rect x="15" y="268" width="6" height="4" rx="1.5" fill="rgba(255,255,255,.5)"/>
+          <rect x="15" y="275" width="6" height="4" rx="1.5" fill="rgba(255,255,255,.5)"/>
+          <rect x="2" y="275" width="10" height="12" rx="2" fill="rgba(255,255,255,.4)"/>
+          <!-- Right hand holding star -->
+          <circle cx="218" cy="273" r="14" fill="rgba(255,255,255,.1)" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+          <text x="218" y="279" font-size="16" text-anchor="middle">⭐</text>
+          <!-- Legs -->
+          <rect x="80" y="310" width="32" height="75" rx="16" fill="#1a2d8f"/>
+          <rect x="118" y="310" width="32" height="75" rx="16" fill="#1a2d8f"/>
+          <!-- Shoes -->
+          <ellipse cx="96" cy="383" rx="22" ry="11" fill="#0B1654"/>
+          <ellipse cx="134" cy="383" rx="22" ry="11" fill="#0B1654"/>
+          <!-- Neck -->
+          <rect x="103" y="165" width="24" height="28" rx="10" fill="url(#skinGrad)"/>
+          <!-- HEAD -->
+          <ellipse cx="115" cy="148" rx="52" ry="56" fill="url(#skinGrad)"/>
+          <!-- Hair -->
+          <ellipse cx="115" cy="102" rx="52" ry="28" fill="#3d1c00"/>
+          <ellipse cx="70" cy="120" rx="18" ry="28" fill="#3d1c00"/>
+          <ellipse cx="160" cy="120" rx="18" ry="28" fill="#3d1c00"/>
+          <!-- Hair highlight -->
+          <ellipse cx="95" cy="98" rx="14" ry="6" fill="rgba(255,255,255,.15)" transform="rotate(-15,95,98)"/>
+          <!-- Eyes -->
+          <ellipse cx="97" cy="145" rx="10" ry="11" fill="white"/>
+          <ellipse cx="133" cy="145" rx="10" ry="11" fill="white"/>
+          <circle cx="99" cy="147" r="7" fill="#3d1c00"/>
+          <circle cx="135" cy="147" r="7" fill="#3d1c00"/>
+          <circle cx="101" cy="145" r="2.5" fill="white"/>
+          <circle cx="137" cy="145" r="2.5" fill="white"/>
+          <!-- Eyebrows -->
+          <path d="M87,132 Q97,126 107,130" fill="none" stroke="#3d1c00" stroke-width="3" stroke-linecap="round"/>
+          <path d="M123,130 Q133,126 143,132" fill="none" stroke="#3d1c00" stroke-width="3" stroke-linecap="round"/>
+          <!-- Smile -->
+          <path d="M96,163 Q115,178 134,163" fill="none" stroke="#c87040" stroke-width="3" stroke-linecap="round"/>
+          <!-- Cheeks -->
+          <ellipse cx="83" cy="163" rx="12" ry="8" fill="#FF9090" opacity=".45"/>
+          <ellipse cx="147" cy="163" rx="12" ry="8" fill="#FF9090" opacity=".45"/>
+          <!-- Graduation cap -->
+          <rect x="75" y="95" width="80" height="12" rx="4" fill="#1a2d8f"/>
+          <polygon points="115,58 155,90 75,90" fill="#6C3FF8"/>
+          <line x1="155" y1="88" x2="163" y2="110" stroke="#FFC430" stroke-width="2.5"/>
+          <circle cx="163" cy="114" r="5" fill="#FFC430"/>
+          <!-- Sparkles near head -->
+          <text x="165" y="90" font-size="14">✨</text>
+          <text x="50" y="90" font-size="12">⚡</text>
+        </g>
+      </svg>
+
+      <!-- Float badges -->
+      <div class="float-badge float-badge-1">
+        <div class="float-dot" style="background:var(--yellow)"></div>
+        Top-Rated Camp 🏆
+      </div>
+      <div class="float-badge float-badge-2">
+        <div class="float-dot" style="background:var(--green)"></div>
+        100% Fun Guaranteed ✅
+      </div>
+      <div class="float-badge float-badge-3">
+        <div class="float-dot" style="background:var(--coral)"></div>
+        In-Person · Prague 🇨🇿
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ TRUST STRIP ═══════════════════ -->
+<div class="trust-strip">
+  <div class="trust-inner">
+    <div class="trust-item reveal">
+      <div class="trust-icon-wrap" style="background:#fff0f5">🏫</div>
+      <span>Expert-Led Classes</span>
+    </div>
+    <div class="trust-divider"></div>
+    <div class="trust-item reveal reveal-delay-1">
+      <div class="trust-icon-wrap" style="background:#f0fff8">👥</div>
+      <span>Small Group Sessions</span>
+    </div>
+    <div class="trust-divider"></div>
+    <div class="trust-item reveal reveal-delay-2">
+      <div class="trust-icon-wrap" style="background:#fff8e8">🎨</div>
+      <span>Visual & Creative Learning</span>
+    </div>
+    <div class="trust-divider"></div>
+    <div class="trust-item reveal reveal-delay-3">
+      <div class="trust-icon-wrap" style="background:#f0f4ff">📍</div>
+      <span>Prague 8 – Libeň Campus</span>
+    </div>
+    <div class="trust-divider"></div>
+    <div class="trust-item reveal reveal-delay-4">
+      <div class="trust-icon-wrap" style="background:#f4f0ff">⭐</div>
+      <span>Loved by Families</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ WHY SECTION ═══════════════════ -->
+<section id="about" class="section why-section">
+  <div class="container">
+    <div class="why-layout">
+      <div>
+        <div class="section-header">
+          <div class="section-tag">Why Visual Math</div>
+          <h2 class="section-title">We Make Math <span>Magical</span> 🔮</h2>
+          <p class="section-subtitle">Every child is naturally curious. Our method unlocks that curiosity, turning abstract numbers into vivid, memorable adventures.</p>
         </div>
-    </section>
-
-    <section id="schedule" class="section">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Program Details</h2>
-                <p class="section-subtitle">Comprehensive summer program designed for maximum learning and engagement.
-                </p>
-            </div>
-
-            <div class="schedule-cards">
-                <div class="schedule-card">
-                    <div class="schedule-icon">📅</div>
-                    <h3 class="schedule-title">Duration</h3>
-                    <p class="schedule-detail">6 Week Intensive Program</p>
-                </div>
-
-                <div class="schedule-card">
-                    <div class="schedule-icon">🗓️</div>
-                    <h3 class="schedule-title">Schedule</h3>
-                    <p class="schedule-detail">Monday - Friday Daily Sessions</p>
-                </div>
-
-                <div class="schedule-card">
-                    <div class="schedule-icon">🏫</div>
-                    <h3 class="schedule-title">Location</h3>
-                    <p class="schedule-detail">Prague 8-Libeň Campus</p>
-                </div>
-
-                <div class="schedule-card">
-                    <div class="schedule-icon">🎯</div>
-                    <h3 class="schedule-title">Start Date</h3>
-                    <p class="schedule-detail">July 2025</p>
-                </div>
-
-                <div class="schedule-card">
-                    <div class="schedule-icon">💰</div>
-                    <h3 class="schedule-title">Early Bird</h3>
-                    <p class="schedule-detail">Special Discount Available</p>
-                </div>
-
-                <div class="schedule-card">
-                    <div class="schedule-icon">👨‍🏫</div>
-                    <h3 class="schedule-title">Format</h3>
-                    <p class="schedule-detail">In-Person Interactive Learning</p>
-                </div>
-            </div>
+        <div class="features-grid">
+          <div class="feat-card reveal">
+            <div class="feat-icon" style="background:#fff0f5">👁️</div>
+            <div class="feat-title">Visual Learning</div>
+            <div class="feat-desc">Abstract concepts become tangible, colourful visuals — making math intuitive for every child.</div>
+          </div>
+          <div class="feat-card reveal reveal-delay-1">
+            <div class="feat-icon" style="background:#f0fff8">🎮</div>
+            <div class="feat-title">Gamified Fun</div>
+            <div class="feat-desc">Every lesson is an adventure — games, puzzles, and interactive challenges keep kids hooked.</div>
+          </div>
+          <div class="feat-card reveal reveal-delay-2">
+            <div class="feat-icon" style="background:#f4f0ff">🧠</div>
+            <div class="feat-title">Deep Understanding</div>
+            <div class="feat-desc">We teach the "why" behind every concept — building life-long foundations, not rote memory.</div>
+          </div>
+          <div class="feat-card reveal reveal-delay-3">
+            <div class="feat-icon" style="background:#fff8e8">🎨</div>
+            <div class="feat-title">Creative Integration</div>
+            <div class="feat-desc">Blend math with art, music, and movement for a rich, multi-sensory learning experience.</div>
+          </div>
+          <div class="feat-card reveal reveal-delay-4">
+            <div class="feat-icon" style="background:#f0faff">👥</div>
+            <div class="feat-title">Small Groups</div>
+            <div class="feat-desc">Personalised attention ensures each child's unique learning style and pace is respected.</div>
+          </div>
+          <div class="feat-card reveal reveal-delay-5">
+            <div class="feat-icon" style="background:#f5fff0">🌟</div>
+            <div class="feat-title">Confidence Building</div>
+            <div class="feat-desc">A supportive, nurturing environment where children celebrate every breakthrough together.</div>
+          </div>
         </div>
-    </section>
+      </div>
 
-    <section id="contact" class="section contact-section">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title" style="color: white;">Ready to Begin?</h2>
-                <p class="section-subtitle" style="color: rgba(255,255,255,0.8);">Get in touch to secure your child's
-                    spot in our transformative math program.</p>
-            </div>
+      <!-- Why illustration -->
+      <div class="why-illustration reveal reveal-delay-2">
+        <svg viewBox="0 0 480 500" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="whyBg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#f4f0ff"/>
+              <stop offset="100%" stop-color="#fff0f5"/>
+            </linearGradient>
+            <linearGradient id="boardGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#1a2d8f"/>
+              <stop offset="100%" stop-color="#0B1654"/>
+            </linearGradient>
+          </defs>
 
-            <div class="contact-grid">
-                <div class="contact-card">
-                    <div class="contact-icon">📧</div>
-                    <h3 class="contact-title">Email Us</h3>
-                    <a href="mailto:hello@stem-intelligence.com" class="contact-link">hello@stem-intelligence.com</a>
-                </div>
+          <!-- Background blob -->
+          <ellipse cx="240" cy="250" rx="220" ry="220" fill="url(#whyBg)"/>
 
-                <div class="contact-card">
-                    <div class="contact-icon">📞</div>
-                    <h3 class="contact-title">Call or WhatsApp</h3>
-                    <a href="https://wa.me/420734712218" class="contact-link">+420 734 712 218</a>
-                </div>
+          <!-- Floor -->
+          <rect x="50" y="410" width="380" height="20" rx="10" fill="rgba(108,63,248,.12)"/>
 
-                <div class="contact-card">
-                    <div class="contact-icon"><img src="assets/facebook.png" width="30px" height="30px"></div>
-                    <h3 class="contact-title">Facebook</h3>
-                    <a href="https://facebook.com/scholarsacademyprague" class="contact-link">Scholars Academy
-                        Prague</a>
-                </div>
+          <!-- Whiteboard on stand -->
+          <rect x="100" y="80" width="280" height="200" rx="18" fill="url(#boardGrad)" stroke="#3a50c8" stroke-width="2"/>
+          <!-- Board glare -->
+          <rect x="110" y="88" width="50" height="184" rx="6" fill="rgba(255,255,255,.04)"/>
+          <!-- Board content -->
+          <text x="240" y="135" font-family="Georgia,serif" font-size="28" fill="#FFC430" text-anchor="middle" font-weight="700">2x + 3 = 11</text>
+          <line x1="120" y1="150" x2="360" y2="150" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+          <text x="240" y="180" font-family="Georgia,serif" font-size="22" fill="rgba(255,255,255,.75)" text-anchor="middle">x = 4 ✓</text>
+          <!-- Diagram: number line -->
+          <line x1="130" y1="215" x2="350" y2="215" stroke="rgba(255,255,255,.35)" stroke-width="2"/>
+          <circle cx="170" cy="215" r="6" fill="#FF70A6"/>
+          <circle cx="210" cy="215" r="6" fill="#00D68F"/>
+          <circle cx="255" cy="215" r="8" fill="#FFC430"/>
+          <circle cx="300" cy="215" r="6" fill="#00C6E0"/>
+          <text x="255" y="205" font-size="10" fill="rgba(255,255,255,.6)" text-anchor="middle">x=4</text>
+          <!-- Board legs -->
+          <rect x="210" y="280" width="12" height="80" rx="5" fill="#3a50c8" transform="rotate(-8,216,280)"/>
+          <rect x="260" y="280" width="12" height="80" rx="5" fill="#3a50c8" transform="rotate(8,266,280)"/>
+          <!-- Board tray -->
+          <rect x="140" y="272" width="200" height="14" rx="6" fill="#3a50c8"/>
+          <!-- Chalk pieces -->
+          <rect x="155" y="273" width="16" height="8" rx="3" fill="white" opacity=".7"/>
+          <rect x="175" y="273" width="16" height="8" rx="3" fill="#FF70A6" opacity=".7"/>
+          <rect x="195" y="273" width="16" height="8" rx="3" fill="#FFC430" opacity=".7"/>
 
-                <div class="contact-card">
-                    <div class="contact-icon">📸</div>
-                    <h3 class="contact-title">Instagram</h3>
-                    <a href="https://instagram.com/Scholarsacademyprague"
-                        class="contact-link">@Scholarsacademyprague</a>
-                </div>
-            </div>
+          <!-- Kid pointing at board -->
+          <g transform="translate(280,200)">
+            <!-- Body -->
+            <ellipse cx="60" cy="175" rx="38" ry="50" fill="#FF9050"/>
+            <!-- Arm pointing left -->
+            <path d="M25,165 Q-20,155 -60,160" fill="none" stroke="#FF9050" stroke-width="22" stroke-linecap="round"/>
+            <circle cx="-60" cy="160" r="12" fill="#FFBE9D"/>
+            <!-- Other arm -->
+            <path d="M95,165 Q115,175 110,200" fill="none" stroke="#FF9050" stroke-width="20" stroke-linecap="round"/>
+            <!-- Legs -->
+            <rect x="32" y="218" width="24" height="55" rx="12" fill="#1a2d8f"/>
+            <rect x="62" y="218" width="24" height="55" rx="12" fill="#1a2d8f"/>
+            <ellipse cx="44" cy="272" rx="16" ry="9" fill="#0B1654"/>
+            <ellipse cx="74" cy="272" rx="16" ry="9" fill="#0B1654"/>
+            <!-- Neck -->
+            <rect x="48" y="122" width="22" height="22" rx="8" fill="#FFBE9D"/>
+            <!-- Head -->
+            <ellipse cx="59" cy="104" rx="40" ry="42" fill="#FFBE9D"/>
+            <!-- Hair -->
+            <ellipse cx="59" cy="68" rx="40" ry="22" fill="#5c2d00"/>
+            <!-- Eyes -->
+            <ellipse cx="45" cy="102" rx="8" ry="8.5" fill="white"/>
+            <ellipse cx="73" cy="102" rx="8" ry="8.5" fill="white"/>
+            <circle cx="47" cy="104" r="5.5" fill="#3d1c00"/>
+            <circle cx="75" cy="104" r="5.5" fill="#3d1c00"/>
+            <circle cx="49" cy="102" r="2" fill="white"/>
+            <circle cx="77" cy="102" r="2" fill="white"/>
+            <!-- Smile -->
+            <path d="M44,118 Q59,130 74,118" fill="none" stroke="#c87040" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- Cheeks -->
+            <ellipse cx="33" cy="116" rx="10" ry="7" fill="#FF9090" opacity=".4"/>
+            <ellipse cx="85" cy="116" rx="10" ry="7" fill="#FF9090" opacity=".4"/>
+          </g>
 
-            <div class="cta-section">
-                <a href="https://forms.gle/ouzktHUf4RtrZPDG7" class="cta-button">Enroll Now - Early Bird Special! 🎉</a>
-                <p style="margin-top: 1rem; color: rgba(255,255,255,0.7); font-size: 0.9rem;">
-                    Limited spots available • Secure your child's future in mathematics
-                </p>
-            </div>
+          <!-- Floating decorations -->
+          <rect x="50" y="150" width="40" height="40" rx="10" fill="rgba(255,196,48,.25)" stroke="#FFC430" stroke-width="1.5" transform="rotate(15,70,170)"/>
+          <text x="70" y="176" font-size="20" text-anchor="middle">📐</text>
+
+          <circle cx="420" cy="160" r="28" fill="rgba(0,198,224,.2)" stroke="#00C6E0" stroke-width="1.5"/>
+          <text x="420" y="167" font-size="20" text-anchor="middle">🔢</text>
+
+          <circle cx="70" cy="380" r="24" fill="rgba(0,214,143,.2)" stroke="#00D68F" stroke-width="1.5"/>
+          <text x="70" y="388" font-size="18" text-anchor="middle">📏</text>
+
+          <rect x="390" y="340" width="42" height="42" rx="11" fill="rgba(255,112,166,.2)" stroke="#FF70A6" stroke-width="1.5"/>
+          <text x="411" y="367" font-size="20" text-anchor="middle">🎲</text>
+
+          <!-- Stars -->
+          <text x="100" y="60" font-size="18" opacity=".6">✨</text>
+          <text x="380" y="80" font-size="14" opacity=".5">⭐</text>
+          <text x="420" y="400" font-size="16" opacity=".5">💡</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ PROGRAMS ═══════════════════ -->
+<section id="programs" class="section programs-section">
+  <div class="programs-bg-orb programs-bg-orb-1"></div>
+  <div class="programs-bg-orb programs-bg-orb-2"></div>
+  <div class="container" style="position:relative;z-index:1">
+    <div class="section-header center">
+      <div class="section-tag">Our Programs</div>
+      <h2 class="section-title">Pick Your <span>Adventure</span> 🚀</h2>
+      <p class="section-subtitle">Three thoughtfully designed programs, each perfectly matched to your child's developmental stage and curiosity level.</p>
+    </div>
+    <div class="age-cards-grid">
+      <!-- Mini Explorers -->
+      <div class="age-card reveal">
+        <div class="age-card-header mini">
+          <span class="age-card-emoji">🌈</span>
+          <div class="age-card-name">Mini Explorers</div>
+          <span class="age-card-range">Ages 3 – 6</span>
         </div>
-    </section>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-logo">Scholars Academy, Prague</div>
-            <p class="footer-text">
-                Empowering young minds through innovative visual mathematics education.<br>
-                A project by STEM Intelligence SMC Private Limited.
-            </p>
-            <div class="footer-divider"></div>
-            <p>&copy; 2025 Scholars Academy Prague. All rights reserved.</p>
+        <div class="age-card-body">
+          <p class="age-card-desc">Foundation building through magical play! We introduce numbers, shapes, and patterns through colour, story, and hands-on discovery.</p>
+          <ul class="age-features">
+            <li><span class="age-check mini">🔢</span> Number recognition & counting</li>
+            <li><span class="age-check mini">🔷</span> Shapes & pattern exploration</li>
+            <li><span class="age-check mini">🧩</span> Spatial reasoning through play</li>
+            <li><span class="age-check mini">📖</span> Mathematical storytelling</li>
+            <li><span class="age-check mini">🎨</span> Color-based learning activities</li>
+          </ul>
         </div>
-    </footer>
+      </div>
 
-    <script>
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
+      <!-- Junior Thinkers -->
+      <div class="age-card reveal reveal-delay-2">
+        <div class="age-card-header junior">
+          <span class="age-card-emoji">🔭</span>
+          <div class="age-card-name">Junior Thinkers</div>
+          <span class="age-card-range">Ages 7 – 10</span>
+        </div>
+        <div class="age-card-body">
+          <p class="age-card-desc">Developing logical minds through puzzles, games, and hands-on experiments. Abstract ideas become concrete, exciting challenges.</p>
+          <ul class="age-features">
+            <li><span class="age-check junior">💡</span> Problem-solving strategies</li>
+            <li><span class="age-check junior">📐</span> Geometric construction</li>
+            <li><span class="age-check junior">🧠</span> Mathematical reasoning</li>
+            <li><span class="age-check junior">🌍</span> Real-world applications</li>
+            <li><span class="age-check junior">🎮</span> Gamified challenges & quests</li>
+          </ul>
+        </div>
+      </div>
 
-        // Navbar scroll effect
-        window.addEventListener('scroll', function () {
-            const nav = document.querySelector('nav');
-            if (window.scrollY > 50) {
-                nav.style.background = 'rgba(255, 255, 255, 0.98)';
-                nav.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
-            } else {
-                nav.style.background = 'rgba(255, 255, 255, 0.95)';
-                nav.style.boxShadow = 'none';
-            }
-        });
+      <!-- Senior Voyagers -->
+      <div class="age-card reveal reveal-delay-4">
+        <div class="age-card-header senior">
+          <span class="age-card-emoji">🛸</span>
+          <div class="age-card-name">Senior Voyagers</div>
+          <span class="age-card-range">Ages 11 – 16</span>
+        </div>
+        <div class="age-card-body">
+          <p class="age-card-desc">Advanced concepts brought to life with technology, data, and real-world problem solving. Prepare for academic excellence.</p>
+          <ul class="age-features">
+            <li><span class="age-check senior">📊</span> Algebra & data literacy</li>
+            <li><span class="age-check senior">⚙️</span> Computational thinking</li>
+            <li><span class="age-check senior">🔬</span> STEM project-based learning</li>
+            <li><span class="age-check senior">📈</span> Statistics & probability</li>
+            <li><span class="age-check senior">🏆</span> Competition prep & Olympiad</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        // Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+<!-- ═══════════════════ SCHEDULE ═══════════════════ -->
+<section id="schedule" class="section schedule-section">
+  <div class="container">
+    <div class="section-header center">
+      <div class="section-tag">Camp Details</div>
+      <h2 class="section-title">Everything You <span>Need to Know</span> 📋</h2>
+      <p class="section-subtitle">A well-structured program designed to fit into your summer while maximising every learning moment.</p>
+    </div>
+    <div class="schedule-grid">
+      <div class="sched-card reveal">
+        <div class="sched-emoji" style="background:#fff0f5">📅</div>
+        <div class="sched-label">Duration</div>
+        <div class="sched-value">6 Week Program</div>
+        <div class="sched-sub">Intensive & immersive</div>
+      </div>
+      <div class="sched-card reveal reveal-delay-1">
+        <div class="sched-emoji" style="background:#f4f0ff">🗓️</div>
+        <div class="sched-label">Schedule</div>
+        <div class="sched-value">Mon – Fri Daily</div>
+        <div class="sched-sub">Interactive sessions each day</div>
+      </div>
+      <div class="sched-card reveal reveal-delay-2">
+        <div class="sched-emoji" style="background:#f0fff8">📍</div>
+        <div class="sched-label">Location</div>
+        <div class="sched-value">Prague 8 – Libeň</div>
+        <div class="sched-sub">Modern campus facility</div>
+      </div>
+      <div class="sched-card reveal reveal-delay-3">
+        <div class="sched-emoji" style="background:#fff8e8">🚀</div>
+        <div class="sched-label">Start Date</div>
+        <div class="sched-value">July 2025</div>
+        <div class="sched-sub">Limited spots available!</div>
+      </div>
+      <div class="sched-card reveal reveal-delay-4">
+        <div class="sched-emoji" style="background:#f0faff">🎁</div>
+        <div class="sched-label">Early Bird Offer</div>
+        <div class="sched-value">Special Discount</div>
+        <div class="sched-sub">Register early & save</div>
+      </div>
+      <div class="sched-card reveal reveal-delay-5">
+        <div class="sched-emoji" style="background:#fff0f5">👨‍🏫</div>
+        <div class="sched-label">Format</div>
+        <div class="sched-value">In-Person Learning</div>
+        <div class="sched-sub">Hands-on & interactive</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-on-scroll');
-                }
-            });
-        }, observerOptions);
+<!-- ═══════════════════ GALLERY SPLASH ═══════════════════ -->
+<section class="section gallery-section" style="padding:3rem 0; overflow:hidden;">
+  <div class="container" style="margin-bottom:2rem">
+    <div class="section-header center" style="margin-bottom:1.5rem">
+      <div class="section-tag">Our World</div>
+      <h2 class="section-title">Inside the <span>Camp</span> 📸</h2>
+    </div>
+  </div>
+  <div class="gallery-scroll">
+    <div class="gallery-track" id="galleryTrack">
+      <!-- Card 1: Group learning -->
+      <div class="gallery-card">
+        <svg viewBox="0 0 260 180" xmlns="http://www.w3.org/2000/svg">
+          <rect width="260" height="180" fill="#e8f4ff"/>
+          <rect x="0" y="120" width="260" height="60" fill="#c8e4ff"/>
+          <!-- Table -->
+          <rect x="40" y="90" width="180" height="10" rx="4" fill="#a0c4e8"/>
+          <rect x="60" y="100" width="10" height="30" rx="3" fill="#a0c4e8"/>
+          <rect x="190" y="100" width="10" height="30" rx="3" fill="#a0c4e8"/>
+          <!-- Kids at table: 3 simplified heads + torsos -->
+          <circle cx="80" cy="72" r="20" fill="#FFBE9D"/>
+          <rect x="64" y="90" width="32" height="20" rx="8" fill="#FF5D6B"/>
+          <circle cx="130" cy="68" r="20" fill="#f0c080"/>
+          <rect x="114" y="86" width="32" height="20" rx="8" fill="#6C3FF8"/>
+          <circle cx="180" cy="72" r="20" fill="#FFBE9D"/>
+          <rect x="164" y="90" width="32" height="20" rx="8" fill="#00C6E0"/>
+          <!-- Books/papers on table -->
+          <rect x="55" y="82" width="28" height="18" rx="3" fill="white" stroke="#c8d8e8" stroke-width="1"/>
+          <rect x="115" y="78" width="28" height="18" rx="3" fill="white" stroke="#c8d8e8" stroke-width="1"/>
+          <rect x="160" y="80" width="28" height="18" rx="3" fill="#fff8e0" stroke="#e0d0a0" stroke-width="1"/>
+          <text x="130" y="165" font-family="Nunito,sans-serif" font-size="11" font-weight="700" fill="#4a6080" text-anchor="middle">Collaborative Learning</text>
+        </svg>
+        <div class="gallery-card-label">Collaborative Problem Solving</div>
+      </div>
 
-        // Observe all cards and sections
-        document.querySelectorAll('.feature-card, .age-card, .schedule-card, .contact-card').forEach(el => {
-            observer.observe(el);
-        });
+      <!-- Card 2: Geometry -->
+      <div class="gallery-card">
+        <svg viewBox="0 0 260 180" xmlns="http://www.w3.org/2000/svg">
+          <rect width="260" height="180" fill="#fff4e8"/>
+          <!-- Colorful geometric shapes scattered -->
+          <polygon points="80,40 40,110 120,110" fill="rgba(255,93,107,.7)" stroke="#FF5D6B" stroke-width="2"/>
+          <circle cx="175" cy="80" r="45" fill="rgba(108,63,248,.65)" stroke="#6C3FF8" stroke-width="2"/>
+          <rect x="30" y="125" width="60" height="40" rx="8" fill="rgba(0,198,224,.7)" stroke="#00C6E0" stroke-width="2"/>
+          <rect x="160" y="130" width="70" height="35" rx="8" fill="rgba(0,214,143,.65)" stroke="#00D68F" stroke-width="2" transform="rotate(10,195,147)"/>
+          <!-- Labels -->
+          <text x="80" y="135" font-family="Georgia,serif" font-size="10" fill="#FF5D6B" text-anchor="middle">△</text>
+          <text x="175" y="84" font-family="Georgia,serif" font-size="10" fill="white" text-anchor="middle">○</text>
+          <!-- Sparkles -->
+          <text x="210" y="30" font-size="18">✨</text>
+          <text x="20" y="30" font-size="14">⭐</text>
+          <text x="240" y="160" font-size="14">🔷</text>
+        </svg>
+        <div class="gallery-card-label">Geometry Exploration</div>
+      </div>
 
-        // Add staggered animation delays
-        document.querySelectorAll('.feature-card').forEach((card, index) => {
-            card.style.animationDelay = `${index * 0.1}s`;
-        });
+      <!-- Card 3: Numbers & counting -->
+      <div class="gallery-card">
+        <svg viewBox="0 0 260 180" xmlns="http://www.w3.org/2000/svg">
+          <rect width="260" height="180" fill="#f0fff8"/>
+          <!-- Abacus representation -->
+          <rect x="40" y="40" width="180" height="110" rx="12" fill="white" stroke="#c8e8d8" stroke-width="2"/>
+          <rect x="50" y="55" width="160" height="8" rx="4" fill="#e8f4ee"/>
+          <!-- Rods -->
+          <line x1="75" y1="55" x2="75" y2="140" stroke="#aad4b8" stroke-width="3"/>
+          <line x1="105" y1="55" x2="105" y2="140" stroke="#aad4b8" stroke-width="3"/>
+          <line x1="135" y1="55" x2="135" y2="140" stroke="#aad4b8" stroke-width="3"/>
+          <line x1="165" y1="55" x2="165" y2="140" stroke="#aad4b8" stroke-width="3"/>
+          <line x1="195" y1="55" x2="195" y2="140" stroke="#aad4b8" stroke-width="3"/>
+          <!-- Beads -->
+          <circle cx="75" cy="80" r="10" fill="#FF5D6B"/>
+          <circle cx="75" cy="100" r="10" fill="#FF5D6B"/>
+          <circle cx="75" cy="120" r="10" fill="#FFb0b0"/>
+          <circle cx="105" cy="70" r="10" fill="#FFC430"/>
+          <circle cx="105" cy="90" r="10" fill="#FFC430"/>
+          <circle cx="105" cy="110" r="10" fill="#ffe8a0"/>
+          <circle cx="135" cy="80" r="10" fill="#00D68F"/>
+          <circle cx="135" cy="100" r="10" fill="#a0f8d8"/>
+          <circle cx="165" cy="75" r="10" fill="#6C3FF8"/>
+          <circle cx="165" cy="95" r="10" fill="#6C3FF8"/>
+          <circle cx="165" cy="115" r="10" fill="#c0a8ff"/>
+          <circle cx="195" cy="85" r="10" fill="#00C6E0"/>
+          <circle cx="195" cy="105" r="10" fill="#a0e8f8"/>
+          <text x="130" y="170" font-size="11" font-family="Nunito,sans-serif" font-weight="700" fill="#4a8060" text-anchor="middle">Counting & Number Sense</text>
+        </svg>
+        <div class="gallery-card-label">Number Sense Activities</div>
+      </div>
 
-        document.querySelectorAll('.age-card').forEach((card, index) => {
-            card.style.animationDelay = `${index * 0.2}s`;
-        });
+      <!-- Card 4: Outdoor math -->
+      <div class="gallery-card">
+        <svg viewBox="0 0 260 180" xmlns="http://www.w3.org/2000/svg">
+          <rect width="260" height="180" fill="#e8f8ff"/>
+          <!-- Sky -->
+          <rect width="260" height="110" fill="#b8e8ff"/>
+          <!-- Sun -->
+          <circle cx="220" cy="35" r="22" fill="#FFC430" opacity=".9"/>
+          <!-- Rays -->
+          <line x1="220" y1="5" x2="220" y2="13" stroke="#FFC430" stroke-width="3" stroke-linecap="round"/>
+          <line x1="248" y1="20" x2="243" y2="25" stroke="#FFC430" stroke-width="3" stroke-linecap="round"/>
+          <line x1="255" y1="50" x2="247" y2="48" stroke="#FFC430" stroke-width="3" stroke-linecap="round"/>
+          <!-- Cloud -->
+          <ellipse cx="80" cy="30" rx="35" ry="18" fill="white" opacity=".85"/>
+          <ellipse cx="60" cy="35" rx="25" ry="16" fill="white" opacity=".85"/>
+          <ellipse cx="105" cy="36" rx="25" ry="15" fill="white" opacity=".85"/>
+          <!-- Grass -->
+          <rect x="0" y="110" width="260" height="70" fill="#7cd87c"/>
+          <!-- Hill -->
+          <ellipse cx="130" cy="110" rx="130" ry="40" fill="#90e090"/>
+          <!-- Kid measuring with ruler outdoors -->
+          <circle cx="90" cy="90" r="18" fill="#FFBE9D"/>
+          <rect x="74" y="106" width="32" height="24" rx="8" fill="#FF5D6B"/>
+          <path d="M74,112 Q50,120 35,130" fill="none" stroke="#FF5D6B" stroke-width="16" stroke-linecap="round"/>
+          <path d="M106,112 Q125,115 140,125" fill="none" stroke="#FF5D6B" stroke-width="16" stroke-linecap="round"/>
+          <!-- Ruler in hand -->
+          <rect x="133" y="118" width="55" height="10" rx="4" fill="#FFC430" stroke="#e0a800" stroke-width="1" transform="rotate(-10,160,123)"/>
+          <!-- Legs -->
+          <rect x="80" y="128" width="16" height="40" rx="8" fill="#1a2d8f"/>
+          <rect x="100" y="128" width="16" height="40" rx="8" fill="#1a2d8f"/>
+          <!-- Measurement marks on ground -->
+          <line x1="40" y1="145" x2="210" y2="145" stroke="rgba(255,255,255,.5)" stroke-width="2" stroke-dasharray="10 5"/>
+          <text x="130" y="172" font-size="11" font-family="Nunito,sans-serif" font-weight="700" fill="#2a6830" text-anchor="middle">Real World Measurement</text>
+        </svg>
+        <div class="gallery-card-label">Outdoor Math Activities</div>
+      </div>
 
-        document.querySelectorAll('.schedule-card').forEach((card, index) => {
-            card.style.animationDelay = `${index * 0.1}s`;
-        });
+      <!-- Card 5: Puzzle time -->
+      <div class="gallery-card">
+        <svg viewBox="0 0 260 180" xmlns="http://www.w3.org/2000/svg">
+          <rect width="260" height="180" fill="#fdf0ff"/>
+          <!-- Puzzle pieces -->
+          <g transform="translate(30,20)">
+            <path d="M0,0 L60,0 Q65,20 60,40 L0,40 Q5,20 0,0 Z" fill="rgba(108,63,248,.7)" stroke="#6C3FF8" stroke-width="1.5"/>
+            <text x="30" y="26" font-size="14" text-anchor="middle" fill="white">π</text>
+          </g>
+          <g transform="translate(90,20)">
+            <path d="M0,0 L60,0 Q55,20 60,40 L0,40 Q5,20 0,0 Z" fill="rgba(255,196,48,.85)" stroke="#e0a800" stroke-width="1.5"/>
+            <text x="30" y="26" font-size="14" text-anchor="middle" fill="white">∑</text>
+          </g>
+          <g transform="translate(150,20)">
+            <path d="M0,0 L60,0 Q65,20 60,40 L0,40 Q5,20 0,0 Z" fill="rgba(0,198,224,.75)" stroke="#00a8c0" stroke-width="1.5"/>
+            <text x="30" y="26" font-size="14" text-anchor="middle" fill="white">÷</text>
+          </g>
+          <g transform="translate(50,70)">
+            <path d="M0,0 L60,0 Q55,20 60,40 L0,40 Q5,20 0,0 Z" fill="rgba(255,112,166,.75)" stroke="#e05090" stroke-width="1.5"/>
+            <text x="30" y="26" font-size="14" text-anchor="middle" fill="white">≠</text>
+          </g>
+          <g transform="translate(120,70)">
+            <path d="M0,0 L60,0 Q65,20 60,40 L0,40 Q5,20 0,0 Z" fill="rgba(0,214,143,.75)" stroke="#00a870" stroke-width="1.5"/>
+            <text x="30" y="26" font-size="14" text-anchor="middle" fill="white">∞</text>
+          </g>
+          <!-- Stars and effects -->
+          <text x="20" y="160" font-size="18">🧩</text>
+          <text x="200" y="165" font-size="16">💡</text>
+          <text x="200" y="20" font-size="14">✨</text>
+          <text x="130" y="155" font-family="Nunito,sans-serif" font-size="11" font-weight="700" fill="#8040a0" text-anchor="middle">Math Puzzle Challenges</text>
+        </svg>
+        <div class="gallery-card-label">Puzzle Solving Sessions</div>
+      </div>
 
-        document.querySelectorAll('.contact-card').forEach((card, index) => {
-            card.style.animationDelay = `${index * 0.1}s`;
-        });
+      <!-- Card 6: Celebration -->
+      <div class="gallery-card">
+        <svg viewBox="0 0 260 180" xmlns="http://www.w3.org/2000/svg">
+          <rect width="260" height="180" fill="#fff8e0"/>
+          <!-- Confetti -->
+          <rect x="30" y="20" width="12" height="12" rx="3" fill="#FF5D6B" transform="rotate(20,36,26)"/>
+          <rect x="80" y="15" width="10" height="10" rx="2" fill="#6C3FF8" transform="rotate(-15,85,20)"/>
+          <rect x="140" y="25" width="12" height="12" rx="3" fill="#00C6E0" transform="rotate(30,146,31)"/>
+          <rect x="200" y="18" width="10" height="10" rx="2" fill="#FFC430" transform="rotate(-20,205,23)"/>
+          <rect x="55" y="140" width="10" height="10" rx="2" fill="#00D68F" transform="rotate(15,60,145)"/>
+          <rect x="190" y="145" width="12" height="12" rx="3" fill="#FF70A6" transform="rotate(-10,196,151)"/>
+          <circle cx="160" cy="30" r="6" fill="#FF5D6B"/>
+          <circle cx="40" cy="135" r="5" fill="#6C3FF8"/>
+          <circle cx="220" cy="140" r="6" fill="#FFC430"/>
+          <!-- Trophy in center -->
+          <rect x="100" y="70" width="60" height="60" rx="10" fill="rgba(255,196,48,.3)" stroke="#FFC430" stroke-width="2"/>
+          <text x="130" y="114" font-size="42" text-anchor="middle">🏆</text>
+          <!-- Stars around trophy -->
+          <text x="70" y="90" font-size="20">⭐</text>
+          <text x="175" y="88" font-size="18">⭐</text>
+          <text x="80" y="145" font-size="16">✨</text>
+          <text x="175" y="145" font-size="16">✨</text>
+          <text x="130" y="168" font-family="Nunito,sans-serif" font-size="11" font-weight="700" fill="#806000" text-anchor="middle">Achievements & Certificates</text>
+        </svg>
+        <div class="gallery-card-label">Awards & Achievements</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        document.querySelector('.mobile-menu-btn').addEventListener('click', () => {
-            document.querySelector('.nav-menu').classList.toggle('mobile-active');
-        });
+<!-- ═══════════════════ TESTIMONIALS ═══════════════════ -->
+<section class="testimonial-section">
+  <div class="container">
+    <div class="section-header center">
+      <div class="section-tag">Parent Reviews</div>
+      <h2 class="section-title">Loved by <span>Families</span> ❤️</h2>
+      <p class="section-subtitle">Hear from the parents who've seen their children grow into confident young mathematicians.</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testi-card reveal">
+        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testi-text">"My daughter used to dread math homework. After two weeks at Scholars Academy, she's the one asking us to do math problems at dinner! The visual approach is truly magical."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:#fff0f5">👩</div>
+          <div>
+            <div class="testi-name">Markéta H.</div>
+            <div class="testi-role">Parent of 8-year-old · Prague 6</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal reveal-delay-2">
+        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testi-text">"The small group format is what sold me. My son gets actual individual attention, not just lost in a crowd. His confidence with numbers has skyrocketed in just one month!"</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:#f4f0ff">👨</div>
+          <div>
+            <div class="testi-name">Tomáš V.</div>
+            <div class="testi-role">Parent of 11-year-old · Prague 2</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal reveal-delay-4">
+        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testi-text">"We enrolled both our children — ages 5 and 13. Both love it and both are progressing brilliantly. Scholars Academy truly tailors learning to each child's age and needs."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:#f0fff8">👩</div>
+          <div>
+            <div class="testi-name">Petra &amp; Jan K.</div>
+            <div class="testi-role">Parents · Prague 8</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                document.querySelector('.nav-menu').classList.remove('mobile-active');
-            });
-        });
+<!-- ═══════════════════ CONTACT ═══════════════════ -->
+<section id="contact" class="section contact-section">
+  <div class="contact-wave-top"></div>
+  <div class="container" style="padding-top:3rem; position:relative; z-index:1">
+    <div class="section-header center">
+      <div class="section-tag">Get In Touch</div>
+      <h2 class="section-title">Ready to <span>Begin</span>? 🎯</h2>
+      <p class="section-subtitle">Secure your child's spot in Prague's most exciting math summer camp. Reach out through any channel below.</p>
+    </div>
 
+    <div class="contact-grid reveal">
+      <div class="contact-card">
+        <div class="contact-card-icon" style="background:rgba(255,93,107,.2)">📧</div>
+        <div class="contact-card-title">Email Us</div>
+        <a href="/cdn-cgi/l/email-protection#543d3a323b1427373c3b383526273537353031392d7a372e" class="contact-card-val"><span class="__cf_email__" data-cfemail="adc4c3cbc2eddecec5c2c1ccdfdeccceccc9c8c0d483ced7">[email&#160;protected]</span></a>
+      </div>
+      <div class="contact-card">
+        <div class="contact-card-icon" style="background:rgba(0,214,143,.2)">📞</div>
+        <div class="contact-card-title">Call / WhatsApp</div>
+        <a href="https://wa.me/420734712218" class="contact-card-val" target="_blank">+420 734 712 218</a>
+      </div>
+      <div class="contact-card">
+        <div class="contact-card-icon" style="background:rgba(108,63,248,.2)">👥</div>
+        <div class="contact-card-title">Facebook</div>
+        <a href="https://facebook.com/scholarsacademyprague" class="contact-card-val" target="_blank">Scholars Academy Prague</a>
+      </div>
+      <div class="contact-card">
+        <div class="contact-card-icon" style="background:rgba(255,196,48,.2)">📸</div>
+        <div class="contact-card-title">Instagram</div>
+        <a href="https://instagram.com/Scholarsacademyprague" class="contact-card-val" target="_blank">@Scholarsacademyprague</a>
+      </div>
+    </div>
 
+    <div class="cta-big reveal reveal-delay-2">
+      <div class="cta-big-title">Claim Your Early Bird Spot! 🐣</div>
+      <p class="cta-big-sub">Limited places available — don't miss your chance to secure a special discounted rate for July 2025.</p>
+      <a href="https://forms.gle/ouzktHUf4RtrZPDG7" class="btn-cta-yellow btn-ripple" target="_blank">
+        🎉 Enroll Now — Special Offer
+      </a>
+      <p class="cta-note">📍 Prague 8-Libeň · Ages 3–16 · In-Person · 6 Weeks</p>
+    </div>
+  </div>
+</section>
 
-        // Add loading animation
-        window.addEventListener('load', () => {
-            document.body.style.opacity = '0';
-            document.body.style.transition = 'opacity 0.5s ease';
-            setTimeout(() => {
-                document.body.style.opacity = '1';
-            }, 100);
-        });
-    </script>
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer>
+  <div class="footer-logo">🧮 Scholars Academy</div>
+  <p class="footer-sub">
+    Empowering young minds through innovative visual mathematics education.<br>
+    A project by <strong style="color:rgba(255,255,255,.7)">STEM Intelligence SMC Private Limited</strong>
+  </p>
+  <div class="footer-links">
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#programs">Programs</a>
+    <a href="#schedule">Schedule</a>
+    <a href="#contact">Contact</a>
+    <a href="https://doodleshapes.netlify.app/" target="_blank">DoodleShapes ↗</a>
+  </div>
+  <div class="footer-divider"></div>
+  <p class="footer-copy">© 2025 Scholars Academy Prague. All rights reserved. Made with ❤️ for curious young minds.</p>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* ─── LOADER ─── */
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('done');
+  }, 1800);
+});
+
+/* ─── MATH PARTICLES ─── */
+const symbols = ['π','∑','÷','×','+','=','∞','%','√','∫','≠','²','³','α','β','Δ','∂'];
+const container = document.getElementById('mathParticles');
+for (let i = 0; i < 30; i++) {
+  const el = document.createElement('div');
+  el.className = 'math-particle';
+  el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+  el.style.left = Math.random() * 100 + 'vw';
+  el.style.bottom = '-40px';
+  el.style.fontSize = (1 + Math.random() * 1.2) + 'rem';
+  el.style.animationDuration = (12 + Math.random() * 20) + 's';
+  el.style.animationDelay = (Math.random() * 15) + 's';
+  container.appendChild(el);
+}
+
+/* ─── NAVBAR SCROLL ─── */
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+}, { passive:true });
+
+/* ─── MOBILE MENU ─── */
+const burger = document.getElementById('navBurger');
+const menu = document.getElementById('navMenu');
+burger.addEventListener('click', () => {
+  menu.classList.toggle('open');
+  burger.textContent = menu.classList.contains('open') ? '✕' : '☰';
+});
+document.querySelectorAll('#navMenu a').forEach(a => {
+  a.addEventListener('click', () => {
+    menu.classList.remove('open');
+    burger.textContent = '☰';
+  });
+});
+
+/* ─── SMOOTH SCROLL ─── */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior:'smooth', block:'start' });
+    }
+  });
+});
+
+/* ─── SCROLL REVEAL ─── */
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold:0.1, rootMargin:'0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+/* ─── DUPLICATE GALLERY for seamless loop ─── */
+const track = document.getElementById('galleryTrack');
+track.innerHTML += track.innerHTML;
+
+/* ─── COUNTER ANIMATION ─── */
+function animateCount(el, target, duration = 1500) {
+  let start = 0;
+  const step = timestamp => {
+    if (!start) start = timestamp;
+    const progress = Math.min((timestamp - start) / duration, 1);
+    el.textContent = Math.round(progress * target);
+    if (progress < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+const counterObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const target = parseInt(entry.target.dataset.count);
+      if (!isNaN(target)) animateCount(entry.target, target);
+      counterObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold:0.5 });
+document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(el));
+</script>
 </body>
-
 </html>
